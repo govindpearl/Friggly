@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "598867774023",
+    "project_id": "friggly",
+    "storage_bucket": "friggly.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:598867774023:android:6cf1534f56cd9c59fbbf62",
+        "android_client_info": {
+          "package_name": "com.pearlorganisation.friggly"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "598867774023-9n4i0n7j5kesif68a65pm95p2f2ub86g.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.pearlorganisation.friggly",
+            "certificate_hash": "cef1089e7f0e20f6d08fa31cee46c75a1bd1b0ce"
+          }
+        },
+        {
+          "client_id": "598867774023-9k2ptomdjje30ifm277secle5ra95khi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB7PmHeraXWa_tE1bsPOGRJ4dEDZwzQ3dg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "598867774023-9k2ptomdjje30ifm277secle5ra95khi.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

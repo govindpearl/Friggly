@@ -1,0 +1,237 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:friggly/loginflow/mobilenumber.dart';
+import 'package:http/http.dart' as http;
+
+import 'package:intl_phone_field/phone_number.dart';
+
+import 'package:otp_timer_button/otp_timer_button.dart';
+import 'package:pinput/pinput.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../Home/MainHomeScreen.dart';
+import '../yourprivacyscreen.dart';
+import 'Signupscreen.dart';
+class Otpscreen extends StatefulWidget {
+  final String? mobile,mobileno;
+  const Otpscreen({Key? key, this.mobile, this.mobileno}) : super(key: key);
+
+  @override
+  State<Otpscreen> createState() => _OtpscreenState();
+}
+
+class _OtpscreenState extends State<Otpscreen> {
+  final FirebaseAuth auth =FirebaseAuth.instance;
+  // OtpTimerButtonController controller = OtpTimerButtonController();
+
+  OtpTimerButtonController controller = OtpTimerButtonController();
+
+  _requestOtp() {
+    controller.loading();
+    Future.delayed(Duration(seconds: 2), () {
+      controller.startTimer();
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    var code="";
+    return Scaffold(body: SafeArea(child: Container(
+      padding: EdgeInsets.all(20),
+      height: double.infinity,
+      width: double.infinity,
+      decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage("assets/bg1.jpg"),
+            fit: BoxFit.cover,
+          )),
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              padding: EdgeInsets.all(15),
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius:BorderRadius.circular(10)
+              ),
+              // height: 300,
+              //width: 200,
+              child: Center(
+                child: Column(
+                  // mainAxisAlignment: MainAxisAlignment.start,
+                  // crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    SizedBox(height: 10,),
+
+                    Text("Login!", textAlign: TextAlign.center,style: TextStyle(fontSize: 40,fontWeight: FontWeight.w700,),),
+                    SizedBox(height: 20,),
+                    Text("Enter OTP received on", textAlign: TextAlign.center,style: TextStyle(fontSize: 20,fontWeight: FontWeight.w400,color: Colors.grey),),
+                    SizedBox(height: 8,),
+                    Text("${widget.mobile}", textAlign: TextAlign.center,style: TextStyle(fontSize: 20,fontWeight: FontWeight.w400,color: Colors.grey),),
+                    SizedBox(height: 30,),
+
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Container(
+                        child: Text("OTP", textAlign: TextAlign.left,style: TextStyle(fontSize: 20,fontWeight: FontWeight.w400,color: Colors.grey),),
+                      ),
+                    ),
+
+                    SizedBox(height: 10,),
+                    Pinput(
+                      length: 6,
+                      showCursor: true,
+                      onChanged: (value){
+                        code=value;
+                      },
+                    ),
+
+                    /*  OtpTextField(
+                      numberOfFields: 6,
+                      borderColor: Color(0xFF512DA8),
+                      //set to true to show as box or false to show as dash
+                      showFieldAsBox: true,
+                      //runs when a code is typed in
+                      onCodeChanged: (String verificationCode) {
+                        code=verificationCode;
+                        //handle validation or checks here
+                      },
+                      //runs when every textfield is filled
+                      onSubmit: (String verificationCode) async {
+
+                          // PhoneAuthCredential credential = PhoneAuthProvider.credential(verificationId:Myphone.verify, smsCode: code);
+                          // await auth.signInWithCredential(credential);
+
+                         // registerdmobile(widget.mobileno);
+
+
+                         // Navigator.push(context, MaterialPageRoute(builder: (context) =>  HomeScreen()));
+
+
+                        //Navigator.push(context, MaterialPageRoute(builder: (context) =>  PrivacyPage()));
+
+                        // showDialog(
+                        //     context: context,
+                        //     builder: (context){
+                        //       return AlertDialog(
+                        //         title: Text("Verification Code"),
+                        //         content: Text('Code entered is $verificationCode'),
+                        //
+                        //       );
+                        //     }
+                        // );
+                      }, // end onSubmit
+                    ),*/
+                    SizedBox(height: 20,),
+
+                    Text("Code Sent", textAlign: TextAlign.left,style: TextStyle(fontSize: 20,fontWeight: FontWeight.w400,color: Colors.grey),),
+
+
+                    SizedBox(height: 50,),
+
+                    OtpTimerButton(
+                      backgroundColor: Color(0xff0EBEAA),
+                      controller: controller,
+                      onPressed: () => _requestOtp(),
+                      text: Text('Resend OTP '),
+                      duration: 6,
+                    ),
+
+
+
+                    // Text("Resend OTP in 00:30", textAlign: TextAlign.center,style: TextStyle(fontSize: 18,fontWeight: FontWeight.w500,color: Colors.grey),),
+                    SizedBox(height: 20,),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 35,right: 35),
+                      child: SizedBox(
+                        height: 40,
+                        width: double.infinity,
+                        child: ElevatedButton(
+                            style: ButtonStyle(
+                                backgroundColor: MaterialStateProperty.all( Color(0xff0EBEAA)),
+                                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                    RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8.0),
+                                      // side: BorderSide(color: Colors.red)
+                                    )
+                                )
+                            ),
+                            onPressed: ()async{
+                              registerdmobile(widget.mobileno);
+
+                              try{
+                                PhoneAuthCredential credential = PhoneAuthProvider.credential(verificationId:Myphone.verify, smsCode: code);
+                                await auth.signInWithCredential(credential);
+                                Fluttertoast.showToast(msg: "Correct OTP");
+
+                                // registerdmobile(widget.mobileno);
+                                // SharedPreferences pref =
+                                // await SharedPreferences.getInstance();
+                                // pref.setString("phone", "${widget.mobile}");
+                                // Navigator.push(context, MaterialPageRoute(builder: (context) =>  HomeScreen()));
+
+                              }
+                              catch(e){
+                                Fluttertoast.showToast(msg: "Wrong OTP");
+                                print("wrong otp");
+                              }
+
+
+                              // Navigator.push(context, MaterialPageRoute(builder: (context) =>  HomeScreen()));
+                            },
+                            child:  Text("Confirm",style: TextStyle(color: Colors.white,fontSize: 20),)
+                        ),
+                      ),
+                    ),
+
+
+                  ],),
+              ),
+            )
+
+          ],),
+      ),
+    ),),);
+  }
+
+
+
+  registerdmobile(mobile)async{
+
+    var request = http.MultipartRequest('POST', Uri.parse('https://test.pearl-developer.com/friglly/public/api/register'));
+    request.fields.addAll({
+      'mobileNo': mobile
+    });
+
+
+    http.StreamedResponse response = await request.send();
+
+    if (response.statusCode == 201) {
+      print("user created");
+      Fluttertoast.showToast(msg: "user created");
+      Navigator.push(context, MaterialPageRoute(builder: (context) =>  PrivacyPage()));
+      print("hello world >>"+await response.stream.bytesToString());
+      print(response.statusCode.toString());
+    }
+    else if(response.statusCode == 200){
+
+      print("User already exist");
+      Fluttertoast.showToast(msg: "User already exist");
+      Navigator.push(context, MaterialPageRoute(builder: (context) =>  HomeScreen()));
+    }
+    else {
+      print(response.statusCode);
+      print("hello wo"+await response.stream.bytesToString());
+
+      print("User registered but profile not created");
+      Fluttertoast.showToast(msg: "User registered but profile not created");
+      Navigator.push(context, MaterialPageRoute(builder: (context) =>  PrivacyPage()));
+    }
+
+  }
+
+
+}
