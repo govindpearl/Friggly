@@ -409,7 +409,7 @@ SizedBox(width: 8,),
   getprofile ()async{
 
     var headers = {
-      'Authorization': 'Bearer 196|n3QOtQn9PVftklyKhR1zHNOa8a0v2odybu52M5bi'
+      'Authorization': 'Bearer 231|ZkFaSlU3awK2ZvDaNONWGnG450cgvKQAL7lajvpn'
     };
     var request = http.Request('GET', Uri.parse('https://test.pearl-developer.com/friglly/public/api/get-profile'));
 

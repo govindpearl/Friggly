@@ -16,6 +16,7 @@ import 'package:intl/intl.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 
 import '../Home/MainHomeScreen.dart';
+import '../app_preferences.dart';
 //import 'package:shared_preferences/shared_preferences.dart';
 //import '../../Utils/app_preferences.dart';
 //import 'SignIn.dart';
@@ -651,7 +652,7 @@ class _signupscreenState extends State<signupscreen> {
 
              signupp(name,email,date,image) async {
                var headers = {
-                 'Authorization': 'Bearer 202|VbS5x3a6m2UvcVUMjPAOEJizcea2nIsC11VFayho'
+                 'Authorization': 'Bearer ${AppPreferences.getToken()}'
                };
                var request = http.MultipartRequest('POST', Uri.parse('https://test.pearl-developer.com/friglly/public/api/create-profile'));
                request.fields.addAll({

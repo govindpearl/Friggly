@@ -3,6 +3,7 @@ import 'package:country_state_city_picker/country_state_city_picker.dart';
 import 'package:dob_input_field/dob_input_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
@@ -12,7 +13,10 @@ import '../Rating_dialog box.dart';
 
 
 class Friends_Profile extends StatefulWidget {
-  const Friends_Profile({Key? key}) : super(key: key);
+
+ final String? namee,mobile;
+
+   Friends_Profile({Key? key, this.namee,this.mobile}) : super(key: key);
 
   @override
   State<Friends_Profile> createState() => _Friends_ProfileState();
@@ -176,6 +180,10 @@ class _Friends_ProfileState extends State<Friends_Profile> {
 
   final _formKey = GlobalKey<FormState>();
 
+  _callNumber({required String phone}) async{
+    print('Hii'+phone);
+    bool? res = await FlutterPhoneDirectCaller.callNumber(phone);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -231,7 +239,9 @@ class _Friends_ProfileState extends State<Friends_Profile> {
                   ],),
 
                   SizedBox(height: 15,),
-                  Text("Govind Rajpoot",style: TextStyle(fontWeight: FontWeight.w700,fontSize: 24),),
+                 // Text("Govind Rajpoot",style: TextStyle(fontWeight: FontWeight.w700,fontSize: 24),),
+                  Text("${widget.namee}",style: TextStyle(fontWeight: FontWeight.w700,fontSize: 24),),
+
 
 
 
@@ -243,6 +253,7 @@ class _Friends_ProfileState extends State<Friends_Profile> {
                     children: [
                       InkWell(
                         onTap: (){
+                          _callNumber(phone:"${widget.mobile}");
                           print("call");
                         },
                         child: Container(
@@ -329,14 +340,14 @@ class _Friends_ProfileState extends State<Friends_Profile> {
                           children: [
                             Icon(Icons.phone,color: Color(0xff03B96E),),
                             SizedBox(width: 10,),
-                            Text("+919876543210"),
+                            Text("${widget.mobile}"),
                           ],
                         ),
                         Row(
                           children: [
                             Icon(Icons.email,color: Color(0xff03B96E),),
                             SizedBox(width: 10,),
-                            Text("govind@gmail.com"),
+                            Text("friggly@gmail.com"),
                           ],
                         ),
                       ],),

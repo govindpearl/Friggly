@@ -81,7 +81,7 @@ class _MyphoneState extends State<Myphone> {
                         ],
 
 
-                        initialCountryCode: 'IN',
+                        //initialCountryCode: 'IN',
                         onCountryChanged: (country) {
                           countryCode = country.dialCode;
                         },
@@ -126,14 +126,18 @@ class _MyphoneState extends State<Myphone> {
                                   },
                                   codeSent: (String verificationId, int? resendToken) {
                                     Myphone.verify=verificationId;
-                                 //   Navigator.push(context, MaterialPageRoute(builder: (context) =>  Otpscreen(mobile:"+${countryCode+_mobileno.text}",)));
+
+                                    Navigator.push(context, MaterialPageRoute(builder: (context) =>  Otpscreen(mobile:"+${countryCode+mobileno.text}",mobileno: mobileno.text.toString(),)));
+
+
+                                    //   Navigator.push(context, MaterialPageRoute(builder: (context) =>  Otpscreen(mobile:"+${countryCode+_mobileno.text}",)));
 
                                   },
                                   codeAutoRetrievalTimeout: (String verificationId) {
                                   },
                                 );
-                                Navigator.push(context, MaterialPageRoute(builder: (context) =>  Otpscreen(mobile:"+${countryCode+mobileno.text}",mobileno: mobileno.text.toString(),)));
-
+                               // Navigator.push(context, MaterialPageRoute(builder: (context) =>  Otpscreen(mobile:"+${countryCode+mobileno.text}",mobileno: mobileno.text.toString(),)));
+                                Fluttertoast.showToast(msg: "Sending OTP");
 
                               },
                               child:  Text("Get OTP",style: TextStyle(color: Colors.white),)

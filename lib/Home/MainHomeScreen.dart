@@ -7,6 +7,7 @@ import '../Leaderboard/leaderboardscreen.dart';
 import '../RATE/Gride_View.dart';
 import '../contact/allcontactlist.dart';
 import '../premium.dart';
+import '../profile/Editprofile.dart';
 import '../profile/new_profile_screen.dart';
 import '../profile/profile.dart';
 import 'MessageScreen.dart';
@@ -32,7 +33,9 @@ class _HomeScreenState extends State<HomeScreen> {
     Allcontactlist(),
     //Grideview(),
     //Leaderboardscreen(),
-    MyHome(),
+
+   // MyHome(),
+    EditProfilePage(),
     Profile_new(),
    // userpost(),
   ];

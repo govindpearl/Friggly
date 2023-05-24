@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:friggly/profile/Editprofile.dart';
 import 'package:friggly/yourprivacyscreen.dart';
 
 import 'RATE/Apprating.dart';
@@ -48,7 +49,7 @@ class _SettingscreenState extends State<Settingscreen> {
                   )
               ),
               onPressed: (){
-                //Navigator.push(context, MaterialPageRoute(builder: (context) =>  ReferandEarnScreen()));
+                Navigator.push(context, MaterialPageRoute(builder: (context) =>  EditProfilePage()));
               },
               child:  Row(
                 children: [
@@ -159,7 +160,32 @@ class _SettingscreenState extends State<Settingscreen> {
           ),
         ),
         SizedBox(height: 10,),
+        SizedBox(
+          height: 50,
+          //width: 120,
+          child: ElevatedButton(
+              style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all( Colors.white),
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                      RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8.0),
+                          side: BorderSide(color: Colors.grey)
+                      )
+                  )
+              ),
+              onPressed: (){
 
+
+              //  Navigator.push(context, MaterialPageRoute(builder: (context) =>  apprating()));
+              },
+              child:  Row(
+                children: [
+                  Icon(Icons.logout,color: Colors.green),
+                  Text("    Logout",style: TextStyle(color: Colors.black,fontSize: 20,fontWeight: FontWeight.w300),),
+                ],
+              )
+          ),
+        ),
 
 
 

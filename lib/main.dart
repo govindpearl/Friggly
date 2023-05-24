@@ -1,10 +1,11 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:friggly/loginflow/Signupscreen.dart';
-import 'package:friggly/sharepreferences.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import 'Home/MainHomeScreen.dart';
+import 'app_preferences.dart';
+import 'loginflow/splashscreen.dart';
 import 'onboardingScreen.dart';
 
 // void main() async{
@@ -19,16 +20,16 @@ import 'onboardingScreen.dart';
 Future<void> main() async{
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  WidgetsFlutterBinding.ensureInitialized();
   await AppPreferences.init();
 
-  SharedPreferences prefs =await SharedPreferences.getInstance();
-  var phone=prefs.getString("phone");
-  print(phone);
-  runApp(MaterialApp(
-    debugShowCheckedModeBanner: false,
-   // home: phone==null?signupscreen():HomeScreen(),
-  ));
+
+  //SharedPreferences prefs =await SharedPreferences.getInstance();
+  //var phone=prefs.getString("phone");
+  //print(phone);
+  // runApp(MaterialApp(
+  //   debugShowCheckedModeBanner: false,
+  //  // home: phone==null?signupscreen():HomeScreen(),
+  // ));
 
   runApp(const MyApp());
 }
@@ -58,6 +59,9 @@ class MyApp extends StatelessWidget {
       ),
       //home:  Onboardingscreen(),
       home:  HomeScreen(),
+      //builder: EasyLoading.init(),
+
+      //home:  SplashScreen(),
     );
   }
 }

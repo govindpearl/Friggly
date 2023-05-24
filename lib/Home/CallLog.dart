@@ -3,10 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dialpad/flutter_dialpad.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
+import 'package:permission_handler/permission_handler.dart';
+
 import 'package:marquee/marquee.dart';
 import 'package:marquee_text/marquee_text.dart';
 import 'package:workmanager/workmanager.dart';
 
+import '../profile/friends_profile.dart';
 import 'Dialpad.dart';
 
 ///TOP-LEVEL FUNCTION PROVIDED FOR WORK MANAGER AS CALLBACK
@@ -52,16 +55,44 @@ class CallLogScreen extends StatefulWidget {
 }
 
 class _CallLogScreenState extends State<CallLogScreen> {
-// var phonenumber ;
 
-   //var gg=  Icon(Icons.person);
+
+  List<CallLogEntry> _callLogs = [];
+
+  @override
+  void initState() {
+    super.initState();
+    requestCallLogPermission();
+  }
+
+  Future<void> requestCallLogPermission() async {
+    if (await Permission.phone.request().isGranted) {
+      fetchCallLogs();
+    }
+  }
+
+  Future<void> fetchCallLogs() async {
+    Iterable<CallLogEntry> callLogs = await CallLog.get();
+    setState(() {
+      _callLogs = callLogs.toList();
+    });
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   Iterable<CallLogEntry> _callLogEntries = <CallLogEntry>[];
-
-  // _callNumber() async{
-  //   const number =phonenumber //set the number here
-  //   bool? res = await FlutterPhoneDirectCaller.callNumber(number);
-  //   //Text('${entry.number}',style: TextStyle(fontWeight: FontWeight.w500,fontSize: 15,color: Color(0xff1A9286)),),
-  // }
 
   void initializeData() async {
     final Iterable<CallLogEntry> result = await CallLog.query();
@@ -71,11 +102,11 @@ class _CallLogScreenState extends State<CallLogScreen> {
   }
 
 
-  @override
+/*  @override
   void initState() {
     initializeData();
     super.initState();
-  }
+  }*/
 
 
   _callNumber({required String phone}) async{
@@ -85,63 +116,7 @@ class _CallLogScreenState extends State<CallLogScreen> {
 
   @override
   Widget build(BuildContext context) {
-/*    const TextStyle mono = TextStyle(fontFamily: 'monospace');
-    final List<Widget> CallLogList = <Widget>[];
-    for (CallLogEntry entry in _callLogEntries) {
-      CallLogList.add(
-        Column(
-          children: <Widget>[
 
-            Divider(),
-            InkWell(
-
-              onTap: () {
-                _callNumber(phone:entry.number!);
-              },
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-
-                  CircleAvatar(
-                    radius: 20,
-
-                    //borderRadius: BorderRadius.circular(100),
-                    //onTap: imagePickerOption,
-                    child: entry.name?[0] != null? Text('${entry.name?[0]}'): Icon(Icons.person),
-                    //Image.network("https://images.unsplash.com/photo-1575936123452-b67c3203c357?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8aW1hZ2V8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60",fit: BoxFit.fill,)
-                  ),
-                  SizedBox(width: 10,),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('${entry.number}',style: TextStyle(fontWeight: FontWeight.w500,fontSize: 15,color: Color(0xff1A9286)),),
-                   //phonenumber=   Text('${entry.number}',style: TextStyle(fontWeight: FontWeight.w500,fontSize: 15,color: Color(0xff1A9286)),),
-                      //Text("hello"+phonenumber.toString()??""),
-                      //Text("Govind kumar",style: TextStyle(fontWeight: FontWeight.w600,fontSize: 20,color: Color(0xff1A9286)),),
-                      Row(children: [
-                        Text('${entry.callType.toString().split(" ")[0].replaceRange(0, 9, "")?? ""}', style: mono),
-                        SizedBox(width: 10,),
-
-                        //Text('${DateTime.fromMillisecondsSinceEpoch(entry.timestamp).toString().split(" ")[1].replaceRange(5,12,"")?? ""}',style: mono),
-                        Text('${DateTime.fromMillisecondsSinceEpoch(entry.timestamp).toString()?? ""}',style: mono),
-
-                      ],),
-                      // Text('${DateTime.fromMillisecondsSinceEpoch(entry.timestamp)}', style: mono),
-
-
-                    ],),
-
-                ],
-              ),
-            ),
-
-          ],
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.start,
-        ),
-      );
-    }*/
 
     return
       Scaffold(
@@ -178,7 +153,50 @@ class _CallLogScreenState extends State<CallLogScreen> {
 
                     return Scrollbar(
                       child:
+
+
                       ListView.builder(
+                        itemCount: _callLogs.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          CallLogEntry callLog = _callLogs[index];
+                          return Row(
+                            children: [
+                              Expanded(
+                                flex:4,
+                                child: InkWell(
+                                  onTap: (){
+                                    _callNumber(phone:callLog.number ?? '');
+
+                                  },
+                                  child: ListTile(
+                                    leading: CircleAvatar(
+                                      child: Icon(Icons.person),
+                                    ),
+                                    title: Text(callLog.name ?? 'Unknown number',),
+                                    subtitle: Text(callLog.number ?? ''),
+                                  ),
+                                ),
+                              ),
+                             // Spacer(),
+                              Expanded(
+                                flex:0,
+                                child: InkWell(
+                                    onTap:(){
+                                      Navigator.push(context, MaterialPageRoute(builder: (context)=>Friends_Profile(namee: callLog.name ?? 'Unknown number',mobile: callLog.number ?? '',)));
+                                    },
+                                    child: Icon(Icons.arrow_forward_ios)),
+                              ),
+                              SizedBox(width: 5,),
+                            ],
+                          );
+                        },
+                      ),
+
+
+
+
+
+                    /*  ListView.builder(
                         itemBuilder: (context, index) {
                           var entry = entries[index];
                           var mono = TextStyle(fontFamily: 'monospace');
@@ -221,12 +239,18 @@ class _CallLogScreenState extends State<CallLogScreen> {
                                             Text('${entry.callType.toString().split(" ")[0].replaceRange(0, 9, "")?? ""}', style: mono),
                                             SizedBox(width: 10,),
 
-                                            //Text('${DateTime.fromMillisecondsSinceEpoch(entry.timestamp).toString().split(" ")[1].replaceRange(5,12,"")?? ""}',style: mono),
-                                            Text('${DateTime.fromMillisecondsSinceEpoch(entry.timestamp).toString()?? ""}',style: mono),
+                                            Text('${DateTime.fromMillisecondsSinceEpoch(entry.timestamp).toString().split(" ")[1].replaceRange(5,12,"")?? ""}',style: mono),
+                                           // Text('${DateTime.fromMillisecondsSinceEpoch(entry.timestamp).toString()?? ""}',style: mono),
 
                                           ],),
                                           // Text('${DateTime.fromMillisecondsSinceEpoch(entry.timestamp)}', style: mono),
                                         ],),
+                                      Spacer(),
+                                      InkWell(
+                                          onTap:(){
+                                            Navigator.push(context, MaterialPageRoute(builder: (context)=>Friends_Profile()));
+                                          },
+                                          child: Icon(Icons.arrow_forward_ios)),
                                     ],
                                   ),
                                 ),
@@ -250,7 +274,12 @@ class _CallLogScreenState extends State<CallLogScreen> {
                         },
                        // itemCount: 11,
                         itemCount: entries.length,
-                      ),
+                      ),*/
+
+
+
+
+
                     );
                   }),
               Positioned(

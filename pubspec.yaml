@@ -72,6 +72,8 @@ dependencies:
   pinput: ^2.2.31
   shared_preferences: ^2.1.1
   geolocator: ^9.0.2
+  dio: ^5.1.2
+  flutter_easyloading: ^3.0.5
 
 
 

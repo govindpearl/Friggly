@@ -1,7 +1,10 @@
+import 'dart:convert';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:friggly/app_preferences.dart';
 import 'package:friggly/loginflow/mobilenumber.dart';
 import 'package:http/http.dart' as http;
 
@@ -160,12 +163,12 @@ class _OtpscreenState extends State<Otpscreen> {
                                 )
                             ),
                             onPressed: ()async{
-                              registerdmobile(widget.mobileno);
 
                               try{
                                 PhoneAuthCredential credential = PhoneAuthProvider.credential(verificationId:Myphone.verify, smsCode: code);
                                 await auth.signInWithCredential(credential);
                                 Fluttertoast.showToast(msg: "Correct OTP");
+                                registerdmobile(widget.mobileno);
 
                                 // registerdmobile(widget.mobileno);
                                 // SharedPreferences pref =
@@ -208,27 +211,47 @@ class _OtpscreenState extends State<Otpscreen> {
 
 
     http.StreamedResponse response = await request.send();
+    final data = jsonDecode(await response.stream.bytesToString());
+    print(data.toString());
 
     if (response.statusCode == 201) {
       print("user created");
       Fluttertoast.showToast(msg: "user created");
       Navigator.push(context, MaterialPageRoute(builder: (context) =>  PrivacyPage()));
-      print("hello world >>"+await response.stream.bytesToString());
-      print(response.statusCode.toString());
+
+      //Navigator.push(context, MaterialPageRoute(builder: (context) =>  HomeScreen()));
+
+
+
+      //Navigator.push(context, MaterialPageRoute(builder: (context) =>  PrivacyPage()));
+      //print("hello world >>"+await response.stream.bytesToString());
     }
-    else if(response.statusCode == 200){
+
+
+
+    /*else if(response.statusCode == 200){
 
       print("User already exist");
+    }*/
+//data['status'] == '301'
+    else if(response.statusCode == 200){
+      AppPreferences.saveCredentials(id: data['userdata']['id'].toString(), token: data['token'], phoneNumber: data['userData']['mobileNo'].toString());
       Fluttertoast.showToast(msg: "User already exist");
       Navigator.push(context, MaterialPageRoute(builder: (context) =>  HomeScreen()));
+
     }
+    else if(response.statusCode == 202){
+      //AppPreferences.saveCredentials(id: '', token: data['token'], phoneNumber: '');
+      Fluttertoast.showToast(msg: "User registered but profile not created");
+      Navigator.push(context, MaterialPageRoute(builder: (context) =>  PrivacyPage()));
+
+    }
+
     else {
       print(response.statusCode);
       print("hello wo"+await response.stream.bytesToString());
 
-      print("User registered but profile not created");
-      Fluttertoast.showToast(msg: "User registered but profile not created");
-      Navigator.push(context, MaterialPageRoute(builder: (context) =>  PrivacyPage()));
+      print("Server error");
     }
 
   }

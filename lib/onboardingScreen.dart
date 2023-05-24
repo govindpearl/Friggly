@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_onboard/flutter_onboard.dart';
+import 'package:friggly/app_preferences.dart';
 
 import 'Home/MainHomeScreen.dart';
 import 'loginflow/mobilenumber.dart';
@@ -8,6 +9,7 @@ class Onboardingscreen extends StatelessWidget {
   final PageController _pageController = PageController();
   @override
   Widget build(BuildContext context) {
+    AppPreferences.setShowOnBoarding(false);
     return SafeArea(
       child: Scaffold(
         body: Container(
