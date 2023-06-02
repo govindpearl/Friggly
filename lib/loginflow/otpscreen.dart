@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
@@ -169,8 +170,8 @@ class _OtpscreenState extends State<Otpscreen> {
                                 await auth.signInWithCredential(credential);
                                 Fluttertoast.showToast(msg: "Correct OTP");
                                 registerdmobile(widget.mobileno);
-
-                                // registerdmobile(widget.mobileno);
+                                // registerdmob
+                                // ile(widget.mobileno);
                                 // SharedPreferences pref =
                                 // await SharedPreferences.getInstance();
                                 // pref.setString("phone", "${widget.mobile}");
@@ -212,49 +213,77 @@ class _OtpscreenState extends State<Otpscreen> {
 
     http.StreamedResponse response = await request.send();
     final data = jsonDecode(await response.stream.bytesToString());
-    print(data.toString());
+    print("user data>>>>>>>>>"+data.toString());
+    Fluttertoast.showToast(msg: data.toString());
+
 
     if (response.statusCode == 201) {
+      print("user data>>>>>>>>>"+data.toString());
+
       print("user created");
       Fluttertoast.showToast(msg: "user created");
-      Navigator.push(context, MaterialPageRoute(builder: (context) =>  PrivacyPage()));
-
-      //Navigator.push(context, MaterialPageRoute(builder: (context) =>  HomeScreen()));
-
-
-
-      //Navigator.push(context, MaterialPageRoute(builder: (context) =>  PrivacyPage()));
-      //print("hello world >>"+await response.stream.bytesToString());
-    }
-
-
-
-    /*else if(response.statusCode == 200){
-
-      print("User already exist");
-    }*/
-//data['status'] == '301'
-    else if(response.statusCode == 200){
-      AppPreferences.saveCredentials(id: data['userdata']['id'].toString(), token: data['token'], phoneNumber: data['userData']['mobileNo'].toString());
-      Fluttertoast.showToast(msg: "User already exist");
-      Navigator.push(context, MaterialPageRoute(builder: (context) =>  HomeScreen()));
-
+      Navigator.push(context, MaterialPageRoute(builder: (context) =>  PrivacyPage(token: data['api_token'],mobile: widget.mobileno),));
+      Fluttertoast.showToast(msg: "Status code 201");
     }
     else if(response.statusCode == 202){
+      print(data.toString());
+
+      Fluttertoast.showToast(msg: "Status code 202");
+
       //AppPreferences.saveCredentials(id: '', token: data['token'], phoneNumber: '');
       Fluttertoast.showToast(msg: "User registered but profile not created");
-      Navigator.push(context, MaterialPageRoute(builder: (context) =>  PrivacyPage()));
+      Navigator.push(context, MaterialPageRoute(builder: (context) =>  PrivacyPage(token: data['api_token'],mobile: widget.mobileno)));
 
     }
 
+    else if(response.statusCode == 200) {
+      print("user data>>>>>>>>>" + data.toString());
+
+      // AppPreferences.saveCredentials(id: data['userdata']['id'].toString(), token: data['token'], phoneNumber: data['userData']['mobileNo'].toString());
+      Fluttertoast.showToast(msg: "User already exist");
+      Fluttertoast.showToast(msg: "Status code 200");
+      Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen(id:data['userData']['id'].toString(), token:data['token'], mobile:data['userData']['mobileNo'],)));
+
+      AppPreferences.saveCredentials(
+          id: data['userData']['id'], token: data['token'], phoneNumber: data['userData']['mobileNo']);
+
+      /*Dio dio = Dio();
+      Options options = Options(
+        headers: {
+          'Authorization': 'Bearer ${data['api_token']}',
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+      );
+
+      Response? response1 = await dio.post("https://test.pearl-developer.com/friglly/public/api/register",
+          data: jsonEncode({'mobileNo':widget.mobileno }),
+          options: options
+      );
+      if(response == null){
+
+      }else if(response1.data['status'] == '301'){
+        print(response1)
+        print('123456------');
+
+
+      }else if(response1.data['status'] != '301'){
+
+      }else{
+
+      }*/
+
+
+    }
     else {
+      Fluttertoast.showToast(msg: "Server problem");
+
       print(response.statusCode);
-      print("hello wo"+await response.stream.bytesToString());
+      print("Error: "+await response.stream.bytesToString());
 
       print("Server error");
+
     }
 
   }
-
-
 }

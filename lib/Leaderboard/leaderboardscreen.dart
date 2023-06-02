@@ -61,6 +61,7 @@ class _LeaderboardscreenState extends State<Leaderboardscreen> {
         ),),
     );
   }
+
   Widget friendswidget(){
 
     return

@@ -29,7 +29,7 @@ class _SplashScreenState extends State<SplashScreen> {
     }else if(AppPreferences.getToken() != ''){
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => HomeScreen()),
+        MaterialPageRoute(builder: (context) => HomeScreen(id: '', token: '', mobile: '',)),
       );
     }else{
       Navigator.pushReplacement(

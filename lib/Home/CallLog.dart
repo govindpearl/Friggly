@@ -172,8 +172,15 @@ class _CallLogScreenState extends State<CallLogScreen> {
                                     leading: CircleAvatar(
                                       child: Icon(Icons.person),
                                     ),
-                                    title: Text(callLog.name ?? 'Unknown number',),
-                                    subtitle: Text(callLog.number ?? ''),
+                                    title: Text(callLog.name ?? 'Unknown number',style: TextStyle(color: Colors.white,fontSize: 17)),
+                                    subtitle: Row(
+                                      children: [
+                                        Text(callLog.number ?? '',style: TextStyle(color: Colors.white70)),
+                                        SizedBox(width: 16,),
+                                        Text(callLog.callType.toString().split(" ")[0].replaceRange(0, 9, "")?? "",style: TextStyle(color: Colors.white70),),
+                                         //Text(callLog.duration)
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ),

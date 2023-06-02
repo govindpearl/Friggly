@@ -17,6 +17,8 @@ class AppPreferences {
     _preferences.setString('id', id);
     _preferences.setString('token', token);
     _preferences.setString('phone', phoneNumber);
+    _preferences.setBool('isLogin', true);
+
 
     //_preferences.setString(AppKeys.userDisplayName, displayName);
   }
@@ -49,6 +51,11 @@ class AppPreferences {
 
   static bool getShowOnBoarding() {
     bool s = _preferences.getBool('onboarding') ?? true;
+    return s;
+  }
+
+  static bool getIsUserLogin() {
+    bool s = _preferences.getBool('isLogin') ?? false;
     return s;
   }
 }

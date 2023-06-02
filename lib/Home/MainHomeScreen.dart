@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 import '../Leaderboard/leaderboardscreen.dart';
 import '../RATE/Gride_View.dart';
+import '../app_preferences.dart';
 import '../contact/allcontactlist.dart';
 import '../premium.dart';
 import '../profile/Editprofile.dart';
@@ -13,7 +14,8 @@ import '../profile/profile.dart';
 import 'MessageScreen.dart';
 import 'fetchmessages.dart';
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  final String? id,token,mobile;
+  const HomeScreen({Key? key, required this.id, required this.token, required this.mobile}) : super(key: key);
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -29,15 +31,15 @@ class _HomeScreenState extends State<HomeScreen> {
   static  List<Widget> _widgetOptions = <Widget>[
     CallLogScreen(),
     SMSFetch(),
-   // MessageScreen(),
+    // MessageScreen(),
     Allcontactlist(),
     //Grideview(),
     //Leaderboardscreen(),
 
-   // MyHome(),
-    EditProfilePage(),
+    MyHome(),
+    //EditProfilePage(),
     Profile_new(),
-   // userpost(),
+    // userpost(),
   ];
 
   void _onItemTapped(int index) {
@@ -47,6 +49,11 @@ class _HomeScreenState extends State<HomeScreen> {
   }
   @override
   Widget build(BuildContext context) {
+    print("token iddd ${AppPreferences.getToken()}");
+    print("Home screen user iddd ${widget.id}");
+    print("Home screen user tokenn ${widget.token}");
+    print("Home screen user mobile ${widget.mobile}");
+    // print(AppPreferences.saveCredentials(id: id, token: token, phoneNumber: phoneNumber));
 
     Future<bool> _willPopCallback() async {
       exit(0);

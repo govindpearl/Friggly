@@ -77,18 +77,18 @@ class _contlistState extends State<contlist> {
             'rating':'0',
             'trait':'0'
           };
-
+print("govind api test >>>>>>>>${jsonObject}");
           Dio dio = Dio();
           final response = await dio.post('https://test.pearl-developer.com/friglly/public/api/addContact',
               data: jsonEncode({
-                "sender_id": "19",
-                "contacts": [
+                "sender_id": "20",
+                "contacts":
                   jsonObject
-                ]
+
               }),
               options: Options(headers: {
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer 249|OXPuz3wAoGTedTAktkV2adiTRLlh86uaH4ABKk8S'
+            'Authorization': 'Bearer 272|zOSOR7ks4vioa05Rp8YwM61GTFAIpybBUSiX3WYv'
           }));
 
           print("saved contacts"+response.toString());
@@ -103,6 +103,7 @@ class _contlistState extends State<contlist> {
       }
     }
   }
+
 
 
 
@@ -200,7 +201,7 @@ class _contlistState extends State<contlist> {
                                               flex: 1,
                                               child: InkWell(
                                                   onTap:(){
-                                                    //print("all contacts "+"${contact.phones!.first.value!}");
+                                                    print("all contacts "+"${contact.phones!.first.value!}");
                                                     Navigator.push(context, MaterialPageRoute(builder: (context)=>Friends_Profile(namee:contact.displayName ?? '',mobile: contact.phones!.first.value.toString(),)));
                                                   },
                                                   child: Icon(Icons.arrow_forward_ios,color: Colors.grey,)),
@@ -216,8 +217,8 @@ class _contlistState extends State<contlist> {
                                                 ? contact.phones!.first.value.toString()
                                                 : 'No phone number',style: TextStyle(color: Colors.white),),
 
-
-                                      RatingBar.builder(
+                                           /*
+                                           RatingBar.builder(
                                               initialRating: 0,
                                               minRating: 1,
                                               direction: Axis.horizontal,
@@ -232,6 +233,8 @@ class _contlistState extends State<contlist> {
                                                 print(rating);
                                               },
                                             ),
+                                            */
+
                                           ],
                                         ),
 

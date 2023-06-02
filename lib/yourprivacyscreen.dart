@@ -1,10 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:friggly/loginflow/Signupscreen.dart';
 
-class PrivacyPage extends StatelessWidget {
+class PrivacyPage extends StatefulWidget {
+  final String? token,mobile;
+
+  const PrivacyPage({Key? key,required this.token,required this.mobile,}) : super(key: key);
+
+  @override
+  State<PrivacyPage> createState() => _PrivacyPageState();
+}
+
+class _PrivacyPageState extends State<PrivacyPage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return
+      Scaffold(
 
       body: SafeArea(
         child: Container(
@@ -180,7 +190,9 @@ class PrivacyPage extends StatelessWidget {
                         width: double.infinity,
                         child: ElevatedButton(
                           onPressed: () {
-                            Navigator.push(context, MaterialPageRoute(builder: (context)=>signupscreen()));
+                            Navigator.push(context, MaterialPageRoute(builder: (context)=>signupscreen(
+                              token: widget.token,mobile: widget.mobile
+                            )));
                             // Handle Agree&continue button press
                           },
                           child: Text('AGREE & CONTINUE',style: TextStyle(fontSize: 20),),

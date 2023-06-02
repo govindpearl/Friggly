@@ -22,7 +22,8 @@ import '../app_preferences.dart';
 //import 'SignIn.dart';
 //import '../homescreen.dart';
 class signupscreen extends StatefulWidget {
-  const signupscreen({Key? key}) : super(key: key);
+  final String? token,mobile;
+  const signupscreen({Key? key, required this.token, required this.mobile}) : super(key: key);
 
   @override
   State<signupscreen> createState() => _signupscreenState();
@@ -319,6 +320,11 @@ class _signupscreenState extends State<signupscreen> {
 
   @override
   Widget build(BuildContext context) {
+    print("latest token>>>>"" ${widget.token}");
+    print("Govind Email"+" ${emailController.text.toString()}");
+    print("Govind name"+" ${nameController.text}");
+    print("Govind Dob"+" ${dateInputController.text}");
+    print("token iddd ${AppPreferences.getToken()}");
     return SafeArea(
       child: Scaffold(
           body:
@@ -520,7 +526,9 @@ class _signupscreenState extends State<signupscreen> {
                               )
                           ),
                           onPressed: (){
-                           //signupp(nameController.text.toString(),emailController.text.toString(),dateInputController.text,pickedpic?.path ?? "");
+                           // Fluttertoast.showToast(msg: "User registered successfully");
+
+                            //signupp(nameController.text.toString(),emailController.text.toString(),dateInputController.text,pickedpic?.path ?? "");
                             signupp(nameController.text.toString(),emailController.text.toString(),dateInputController.text.toString(),pickedImage?.path ?? "");
 
 
@@ -561,98 +569,18 @@ class _signupscreenState extends State<signupscreen> {
   }
 
 
-  showVerificationDialog(BuildContext context,) {
-    double height = MediaQuery.of(context).size.height;
-    double width = MediaQuery.of(context).size.width;
 
-    return showModalBottomSheet<void>(
-      backgroundColor: const Color(0xfff1f1f1),
-      // context and builder are
-      // required properties in this widget+
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.only(
-            topRight: Radius.circular(40.0), topLeft: Radius.circular(40.0)),
-      ),
-      context: context,
-      builder: (context1) {
-        // we set up a container inside which
-        // we create center column and display text
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            SizedBox(height: 30,),
-            Padding(
-              padding: const EdgeInsets.all(18.0),
-              child: Text(
-                "Enter verification code recieved on your Email/Phone number",
-                textAlign: TextAlign.center,
-                style: GoogleFonts.montserrat(fontSize: 25,fontWeight: FontWeight.w500),
-              ),
-            ),
-
-            Padding(
-              padding: const EdgeInsets.all(30),
-              child: TextField(
-                keyboardType: TextInputType.number,
-                inputFormatters: [
-                  // FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-                  FilteringTextInputFormatter.digitsOnly
-
-                ],
-                decoration: InputDecoration(
-                  //floatingLabelBehavior: FloatingLabelBehavior.never, //Hides label on focus or if filled
-                  labelText: "Verification code",
-                  border: OutlineInputBorder(
-                    // borderSide: BorderSide.none,              // No border
-                    borderRadius: BorderRadius.circular(12),  // Apply corner radius
-                  ),
-                ),
-              ),
-            ),
-
-            Padding(
-              padding: const EdgeInsets.only(left: 35,right: 35),
-              child: SizedBox(
-                height: 40,
-                width: double.infinity,
-                child: ElevatedButton(
-                    style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all( Color(0xff0EBEAA)),
-                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                            RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8.0),
-                              // side: BorderSide(color: Colors.red)
-                            )
-                        )
-                    ),
-                    onPressed: () async {
-                     // login(nameController.text.toString(),phoneController.text.toString(),emailController.text.toString(), passwordController.text.toString());
-
-                      //signup(nameController.text.toString(),emailController.text.toString(),"male",dateInputController.text,pickedpic?.path ?? "");
-                      //SharedPreferences pref =
-                      //await SharedPreferences.getInstance();
-                     // pref.setString("email", emailController.text);
-
-                       Navigator.push(context, MaterialPageRoute(builder: (context) =>  HomeScreen()));
-                    },
-                    child:  Text("Confirm",style: TextStyle(color: Colors.white,fontSize: 20),)
-                ),
-              ),
-            ),
-
-          ],
-        );
-      },
-    );
-  }
 
 
 
 
              signupp(name,email,date,image) async {
                var headers = {
-                 'Authorization': 'Bearer ${AppPreferences.getToken()}'
+                 //'Authorization': 'Bearer ${AppPreferences.getToken()}'
+               //'Authorization': 'Bearer 313|HJSyeBC9lESl2drJwHu3UaP4gL4AsJwkT44mlNT4'
+               'Authorization': 'Bearer ${widget.token}'
+               //'Authorization': widget.token
+
                };
                var request = http.MultipartRequest('POST', Uri.parse('https://test.pearl-developer.com/friglly/public/api/create-profile'));
                request.fields.addAll({
@@ -665,21 +593,25 @@ class _signupscreenState extends State<signupscreen> {
                request.headers.addAll(headers);
 
                http.StreamedResponse response = await request.send();
-
+               final data = jsonDecode(await response.stream.bytesToString());
                if (response.statusCode == 200) {
+                 Navigator.push(context, MaterialPageRoute(builder: (context) =>  HomeScreen(id:data['userData']['id'],token: data['api_token'],mobile: data['userData']['mobileNo'])));
+/*
                  print(await response.stream.bytesToString());
-                 print("Govind Email"+"${emailController}");
-                 print("Govind name"+"${nameController}");
-                 print("Govind Dob"+"${dateInputController}");
+                 print("Govind Email"+"${emailController.text}");
+                 print("Govind name"+"${nameController.text}");
+                 print("Govind Dob"+"${dateInputController.text}");*/
                  Fluttertoast.showToast(msg: "registerd");
-                 Navigator.push(context, MaterialPageRoute(builder: (context) =>  HomeScreen()));
+                 AppPreferences.saveCredentials(
+                     id: data['userData']['id'], token: data['token'], phoneNumber: data['userData']['mobileNo']);
+                // Navigator.push(context, MaterialPageRoute(builder: (context) =>  HomeScreen()));
 
 
                }
                else {
-                 print("Govind Email"+"${emailController}");
-                 print("Govind name"+"${nameController}");
-                 print("Govind Dob"+"${dateInputController}");
+                 print("Govind Email"+"${emailController.text}");
+                 print("Govind name"+"${nameController.text}");
+                 print("Govind Dob"+"${dateInputController.text}");
 
 
 

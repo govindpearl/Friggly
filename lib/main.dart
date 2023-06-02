@@ -58,10 +58,10 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       //home:  Onboardingscreen(),
-      home:  HomeScreen(),
+      //home:  HomeScreen(),
       //builder: EasyLoading.init(),
 
-      //home:  SplashScreen(),
+      home:  SplashScreen(),
     );
   }
 }

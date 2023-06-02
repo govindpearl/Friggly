@@ -75,14 +75,15 @@ class _EditProfilePageState extends State<EditProfilePage> {
             ),
           ],*/
         ),
-        body:SingleChildScrollView(
-          child: Container(
-            width: double.infinity,
-            decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage("assets/frigglybg.jpg"),
-                  fit: BoxFit.cover,
-                )),
+        body:Container(
+height: double.infinity,
+          width: double.infinity,
+          decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage("assets/frigglybg.jpg"),
+                fit: BoxFit.cover,
+              )),
+          child: SingleChildScrollView(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
