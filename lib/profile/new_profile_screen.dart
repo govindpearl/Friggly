@@ -13,6 +13,7 @@ import 'package:http/http.dart' as http;
 
 import '../ModelClass/user_profile_model.dart';
 import '../Settingscreen.dart';
+import '../app_preferences.dart';
 
 
 
@@ -607,7 +608,8 @@ class _Profile_newState extends State<Profile_new> {
 
     // Define the headers
     Map<String, String> headers = {
-      'Authorization': 'Bearer 272|zOSOR7ks4vioa05Rp8YwM61GTFAIpybBUSiX3WYv',
+      'Authorization': 'Bearer ${AppPreferences.getToken()}'
+      //'Authorization': 'Bearer 272|zOSOR7ks4vioa05Rp8YwM61GTFAIpybBUSiX3WYv',
     };
 
     // Define the API endpoint

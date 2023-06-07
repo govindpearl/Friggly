@@ -3,6 +3,8 @@ import 'package:friggly/profile/Editprofile.dart';
 import 'package:friggly/yourprivacyscreen.dart';
 
 import 'RATE/Apprating.dart';
+import 'app_preferences.dart';
+import 'loginflow/mobilenumber.dart';
 
 class Settingscreen extends StatefulWidget {
   const Settingscreen({Key? key}) : super(key: key);
@@ -175,8 +177,10 @@ class _SettingscreenState extends State<Settingscreen> {
               ),
               onPressed: (){
 
-
-              //  Navigator.push(context, MaterialPageRoute(builder: (context) =>  apprating()));
+                AppPreferences.clearCredentials();
+                Navigator.pop(context);
+                Navigator.pushReplacement(context, MaterialPageRoute(
+                    builder: (context) => Myphone()));
               },
               child:  Row(
                 children: [

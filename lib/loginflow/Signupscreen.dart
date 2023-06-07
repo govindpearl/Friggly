@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:country_state_city_picker/country_state_city_picker.dart';
+import 'package:dio/dio.dart';
 import 'package:dob_input_field/dob_input_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -7,16 +8,17 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gender_picker/source/gender_picker.dart';
 import 'package:gender_picker/source/enums.dart';
 
-import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'dart:convert';
-import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 
 import '../Home/MainHomeScreen.dart';
 import '../app_preferences.dart';
+import 'package:dio/dio.dart' as dio;
+import 'package:dio/src/form_data.dart' as dioFormData;
+
 //import 'package:shared_preferences/shared_preferences.dart';
 //import '../../Utils/app_preferences.dart';
 //import 'SignIn.dart';
@@ -529,7 +531,7 @@ class _signupscreenState extends State<signupscreen> {
                            // Fluttertoast.showToast(msg: "User registered successfully");
 
                             //signupp(nameController.text.toString(),emailController.text.toString(),dateInputController.text,pickedpic?.path ?? "");
-                            signupp(nameController.text.toString(),emailController.text.toString(),dateInputController.text.toString(),pickedImage?.path ?? "");
+                            signUp(nameController.text.toString(),emailController.text.toString(),dateInputController.text.toString(),pickedImage?.path ?? "",widget.token.toString());
 
 
 
@@ -572,9 +574,108 @@ class _signupscreenState extends State<signupscreen> {
 
 
 
+  Future<void> signUp(
+      String name,
+      String email,
+      String date,
+      String image,
+      String token,
+      ) async {
+    try {
+      dio.Dio dioInstance = dio.Dio();
+      var headers = {
+        //'Authorization': 'Bearer ${AppPreferences.getToken()}'
+        //'Authorization': 'Bearer 313|HJSyeBC9lESl2drJwHu3UaP4gL4AsJwkT44mlNT4'
+        'Authorization': 'Bearer $token',
+        //'Authorization': token
+      };
+      var formData = dioFormData.FormData.fromMap({
+        'name': name,
+        'email': email,
+        'dob': date,
+        'gender': 'Male',
+        'image': await dio.MultipartFile.fromFile(image),
+      });
+
+      var response = await dioInstance.post(
+        'https://test.pearl-developer.com/friglly/public/api/create-profile',
+        data: formData,
+        options: dio.Options(headers: headers),
+      );
+
+      if (response.statusCode == 200) {
+        var data = response.data;
+        print("govind registered data >>>>>>>>${data}");
+        try {
+
+          Dio _dio = Dio();
+          Options options = Options(
+            headers: {
+              'Authorization': 'Bearer ${token}',
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+            },
+          );
+          Response response = await _dio.get("https://test.pearl-developer.com/friglly/public/api/get-profile", options: options);
+          print("dio respose with id ${response}");
+
+          if(response.data['status']=='201'){
+            AppPreferences.saveCredentials(
+                id: response.data['profile']['id'].toString(), token: token, phoneNumber:response.data['profile']['mobileNo']);
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => HomeScreen(
+                  id: data['userData']['id'].toString(),
+                  token: token,
+                  mobile: data['userData']['mobileNo'],
+                ),
+              ),
+            );
+          }else{
+            Fluttertoast.showToast(msg: "unable to get user profile");
+
+          }
+
+        } on DioError catch (e) {
+          print(e.response?.statusCode);
+
+          print(e.toString());
+          if (e.response?.statusCode == 404) {
+            print(e.response?.statusCode);
+          } else {
+            print(e.message);
+            //print(e.request);
+          }
+        }
 
 
-             signupp(name,email,date,image) async {
+        print("govind >>>>>>>>>>${data}");
+        Fluttertoast.showToast(msg: "registered");
+        AppPreferences.saveCredentials(
+          id: data['userData']['id'],
+          token: data['token'],
+          phoneNumber: data['userData']['mobileNo'],
+        );
+      } else {
+        print("Govind Email: $email");
+        print("Govind Name: $name");
+        print("Govind Dob: $date");
+
+        print(response.statusMessage);
+        print(response.data);
+        Fluttertoast.showToast(msg: "failed");
+      }
+    } catch (error) {
+      print(error.toString());
+      Fluttertoast.showToast(msg: "An error occurred");
+    }
+  }
+
+
+
+
+/* signupp(name,email,date,image) async {
                var headers = {
                  //'Authorization': 'Bearer ${AppPreferences.getToken()}'
                //'Authorization': 'Bearer 313|HJSyeBC9lESl2drJwHu3UaP4gL4AsJwkT44mlNT4'
@@ -594,13 +695,18 @@ class _signupscreenState extends State<signupscreen> {
 
                http.StreamedResponse response = await request.send();
                final data = jsonDecode(await response.stream.bytesToString());
+               print("govind registerd data>>>>>>>>>>${data}");
+
                if (response.statusCode == 200) {
+
+
                  Navigator.push(context, MaterialPageRoute(builder: (context) =>  HomeScreen(id:data['userData']['id'],token: data['api_token'],mobile: data['userData']['mobileNo'])));
-/*
+*//*
                  print(await response.stream.bytesToString());
                  print("Govind Email"+"${emailController.text}");
                  print("Govind name"+"${nameController.text}");
-                 print("Govind Dob"+"${dateInputController.text}");*/
+                 print("Govind Dob"+"${dateInputController.text}");*//*
+                 print("govind >>>>>>>>>>${data}");
                  Fluttertoast.showToast(msg: "registerd");
                  AppPreferences.saveCredentials(
                      id: data['userData']['id'], token: data['token'], phoneNumber: data['userData']['mobileNo']);
@@ -623,6 +729,9 @@ class _signupscreenState extends State<signupscreen> {
 
 
 
-             }}
+             }*/
+
+
+}
 
 

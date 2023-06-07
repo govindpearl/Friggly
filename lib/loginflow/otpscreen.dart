@@ -210,15 +210,18 @@ class _OtpscreenState extends State<Otpscreen> {
       'mobileNo': mobile
     });
 
-
     http.StreamedResponse response = await request.send();
-    final data = jsonDecode(await response.stream.bytesToString());
-    print("user data>>>>>>>>>"+data.toString());
+    final String newData = await response.stream.bytesToString();
+    final data = jsonDecode(newData);
+    //print("user data>>>>>>>>>"+data.toString());
+    print("New Data>>>>>>>>> $newData");
+
     Fluttertoast.showToast(msg: data.toString());
 
 
     if (response.statusCode == 201) {
-      print("user data>>>>>>>>>"+data.toString());
+      print("user data>>>>>>>>> first time"+data.toString());
+      //print(data.toString());
 
       print("user created");
       Fluttertoast.showToast(msg: "user created");
@@ -226,26 +229,29 @@ class _OtpscreenState extends State<Otpscreen> {
       Fluttertoast.showToast(msg: "Status code 201");
     }
     else if(response.statusCode == 202){
-      print(data.toString());
+      print("user data>>>>>>>>> second time "+data.toString());
+
+      //print(data.toString());
 
       Fluttertoast.showToast(msg: "Status code 202");
 
       //AppPreferences.saveCredentials(id: '', token: data['token'], phoneNumber: '');
       Fluttertoast.showToast(msg: "User registered but profile not created");
-      Navigator.push(context, MaterialPageRoute(builder: (context) =>  PrivacyPage(token: data['api_token'],mobile: widget.mobileno)));
+      Navigator.push(context, MaterialPageRoute(builder: (context) =>  PrivacyPage(token: data['api_token'],mobile: widget.mobileno),));
 
     }
 
     else if(response.statusCode == 200) {
-      print("user data>>>>>>>>>" + data.toString());
+      print("user data>>>>>>>>> last time " + data.toString());
 
       // AppPreferences.saveCredentials(id: data['userdata']['id'].toString(), token: data['token'], phoneNumber: data['userData']['mobileNo'].toString());
       Fluttertoast.showToast(msg: "User already exist");
       Fluttertoast.showToast(msg: "Status code 200");
-      Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen(id:data['userData']['id'].toString(), token:data['token'], mobile:data['userData']['mobileNo'],)));
-
       AppPreferences.saveCredentials(
-          id: data['userData']['id'], token: data['token'], phoneNumber: data['userData']['mobileNo']);
+          id: data['userData']['id'].toString(), token: data['token'], phoneNumber: data['userData']['mobileNo'].toString());
+      Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen(id:data['userData']['id'].toString(), token:data['token'], mobile:data['userData']['mobileNo'].toString(),)));
+
+
 
       /*Dio dio = Dio();
       Options options = Options(

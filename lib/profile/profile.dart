@@ -4,6 +4,7 @@ import 'package:animated_text_lerp/animated_text_lerp.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_switch/flutter_switch.dart';
+import 'package:friggly/app_preferences.dart';
 //import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
@@ -409,7 +410,8 @@ SizedBox(width: 8,),
   getprofile ()async{
 
     var headers = {
-      'Authorization': 'Bearer 231|ZkFaSlU3awK2ZvDaNONWGnG450cgvKQAL7lajvpn'
+      //'Authorization': 'Bearer 231|ZkFaSlU3awK2ZvDaNONWGnG450cgvKQAL7lajvpn'
+      'Authorization': 'Bearer ${AppPreferences.getToken()}'
     };
     var request = http.Request('GET', Uri.parse('https://test.pearl-developer.com/friglly/public/api/get-profile'));
 

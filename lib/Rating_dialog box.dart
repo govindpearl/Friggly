@@ -2,16 +2,34 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:geolocator/geolocator.dart';
 
+
 class AddressDialog extends StatefulWidget {
   @override
   _AddressDialogState createState() => _AddressDialogState();
 }
 
 class _AddressDialogState extends State<AddressDialog> {
+  List<int> selectedItems = [];
+
+  void selectItem(int index) {
+    setState(() {
+      if (selectedItems.contains(index)) {
+        selectedItems.remove(index);
+      } else {
+        selectedItems.add(index);
+      }
+    });
+  }
+
+
+
   String rate = "";
+
 
   @override
   Widget build(BuildContext context) {
+    print(selectedItems);
+
     return SafeArea(
       child: Dialog(
         shape: RoundedRectangleBorder(
@@ -59,8 +77,77 @@ class _AddressDialogState extends State<AddressDialog> {
 
                 Text("Would you recommend him/her for below qualities ?", textAlign: TextAlign.center,),
 
+
+                Container(
+                  height:300,
+
+                  child: Column(
+
+                    children: [
+                      Container(
+                        padding: EdgeInsets.all(10),
+                        alignment: Alignment.center,
+                        child: Text(
+                          'Selected qualities: ${selectedItems.length}',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        child: GridView.builder(
+                          itemCount: 7,
+                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 3,
+                          ),
+                          itemBuilder: (BuildContext context, int index) {
+                            return GestureDetector(
+                              onTap: () => selectItem(index),
+                              child: Container(
+                                margin: EdgeInsets.all(10),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  image: DecorationImage(
+                                    image: AssetImage('assets/extrovert.jpg'),
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                                child: Stack(
+                                  children: [
+                                    Positioned(
+                                      //top:12,
+                                      bottom: 1,
+                                      child: Text(
+                                        'Extrovert ${index + 1}',
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+
+                                    if (selectedItems.contains(index))
+
+                                      Container(
+                                        color: Colors.black.withOpacity(0.5),
+                                      ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+
+
                 SizedBox(height: 20),
-                Column(
+                /*Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -205,7 +292,7 @@ class _AddressDialogState extends State<AddressDialog> {
                     ),
                     SizedBox(height: 20,),
                   ],
-                ),
+                ),*/
                 //Text("Add Review",textAlign: TextAlign.start,),
                 TextField(
                   minLines: 8,
@@ -249,7 +336,6 @@ class _AddressDialogState extends State<AddressDialog> {
                   ],
                 ),
                 SizedBox(height: 30,),
-
               ],
             ),
           ),
