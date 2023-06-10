@@ -8,12 +8,14 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:internet_popup/internet_popup.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:http/http.dart' as http;
 
 import '../Leaderboard/leaderboardscreen.dart';
 import '../RATE/Gride_View.dart';
+import '../app_preferences.dart';
 import '../profile/friends_profile.dart';
 
 class Allcontactlist extends StatelessWidget {
@@ -60,44 +62,69 @@ class _contlistState extends State<contlist> {
     if (await Permission.contacts.request().isGranted) {
       if (await Permission.contacts.request().isGranted) {
         await fetchContacts();
+
         print('-----> ${_contacts.length}');
         Map<String,String> contactsMap = Map();
 
         for(var item in _contacts){
           //print('${contactsMap[item.displayName!]} ----> ${item.phones!.isNotEmpty?item.phones![0].toString():'empty'}');
           //contactsMap[item.displayName!] = item.phones!.isNotEmpty?item.phones![0].toString():'empty';
-          contactsMap[item.displayName!] = item.phones!.isNotEmpty
+          contactsMap[item.displayName.toString()] = item.phones!.isNotEmpty
               ? item.phones!.first.value.toString()
               : 'No phone number';
         }
-        contactsMap.forEach((key, value) async {
+        List<Map<String,dynamic>> jsonObject = [];
+        contactsMap.forEach((value,key) async {
+          Map<String, dynamic> _map = Map();
+
+          _map['number'] = key;
+          _map['name'] =value ;
+          _map['rating'] = 0;
+          _map['trait'] = 0;
+          jsonObject.add(_map);
+
+/*
           Map<String, dynamic> jsonObject = {
-            'contact': key,
-            'phone': value,
-            'rating':'0',
-            'trait':'0'
+            'number': value,
+            'name': key.toString(),
+            'rating':0,
+            'trait':0
           };
-print("govind api test >>>>>>>>${jsonObject}");
+*/
+
+
+        });
+        print("govind api test >>>>>>>>${jsonObject}");
+
+        print("contactssss>>>"+"${contactsMap.keys} hello");
+
+
+        try{
           Dio dio = Dio();
+          //var contacts = jsonEncode(jsonObject);
+          print('object: $jsonObject');
           final response = await dio.post('https://test.pearl-developer.com/friglly/public/api/addContact',
               data: jsonEncode({
-                "sender_id": "20",
-                "contacts":
-                  jsonObject
-
+                "sender_id": "${AppPreferences.getSenderId()}",
+                "contacts": jsonObject
               }),
+
               options: Options(headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer 272|zOSOR7ks4vioa05Rp8YwM61GTFAIpybBUSiX3WYv'
-          }));
+                // 'Content-Type': 'application/json',
+                'Authorization': 'Bearer ${AppPreferences.getToken()}'
+              }));
+          print("govind api test >>>>>>>>${jsonObject}");
 
           print("saved contacts"+response.toString());
 
-          print('Contact: $key, Phone: $value');
-
-        });
-        print("contactssss>>>"+"${contactsMap.keys} hello");
-      } else {
+          print("Status code for contact updates>>>>>>>>> ${response.statusCode}");
+         // print('Contact: $key, Phone: $value');
+        }
+        catch(error){
+          print(error);
+        }
+      }
+      else {
         // Handle the scenario when the user denies permission
         // or when the permission is permanently denied
       }
