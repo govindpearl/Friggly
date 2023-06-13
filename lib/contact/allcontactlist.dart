@@ -78,7 +78,7 @@ class _contlistState extends State<contlist> {
           Map<String, dynamic> _map = Map();
 
           _map['number'] = key;
-          _map['name'] =value ;
+          _map['name'] =value;
           _map['rating'] = 0;
           _map['trait'] = 0;
           jsonObject.add(_map);

@@ -1,7 +1,11 @@
+import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:friggly/Home/CallLog.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:phone_state_background/phone_state_background.dart';
 
 import '../Leaderboard/leaderboardscreen.dart';
 import '../RATE/Gride_View.dart';
@@ -13,6 +17,122 @@ import '../profile/new_profile_screen.dart';
 import '../profile/profile.dart';
 import 'MessageScreen.dart';
 import 'fetchmessages.dart';
+
+
+
+// show pop up incoming call like a trucaller  code started.
+
+/// Be sure to annotate @pragma('vm:entry-point') your callback function to avoid issues in release mode on Flutter >= 3.3.0
+@pragma('vm:entry-point')
+
+/// Defines a callback that will handle all background incoming events
+Future<void> phoneStateBackgroundCallbackHandler(
+    PhoneStateBackgroundEvent event,
+    String number,
+    int duration,
+    ) async {
+  switch (event) {
+    case PhoneStateBackgroundEvent.incomingstart:
+      print(">>>>>>>>>incoming call");
+
+
+      Fluttertoast.showToast(
+          msg: 'Incoming call start, number: $number',
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 110,
+          textColor: Colors.white70,
+          fontSize: 16.0
+      );
+      log('Incoming call start, number: $number, duration: $duration s');
+
+
+      break;
+    case PhoneStateBackgroundEvent.incomingmissed:
+      Fluttertoast.showToast(
+          msg: 'Incoming call missed, number: $number',
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 4,
+          textColor: Colors.white70,
+          fontSize: 16.0
+      );
+      log('Incoming call missed, number: $number, duration: $duration s');
+
+      break;
+    case PhoneStateBackgroundEvent.incomingreceived:
+
+      Fluttertoast.showToast(
+          msg: 'Incoming call received, number: $number, duration: $duration s',
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 4,
+          textColor: Colors.white70,
+          fontSize: 16.0
+      );
+      print("call recived.....");
+
+      log('Incoming call received, number: $number, duration: $duration s');
+
+      EasyLoading.showToast("call reci sucessfully");
+
+      print("call recived...>>>");
+
+
+      break;
+    case PhoneStateBackgroundEvent.incomingend:
+
+      Fluttertoast.showToast(
+          msg: 'Incoming call ended, number: $number, duration: $duration s',
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 100,
+          textColor: Colors.red,
+          fontSize: 16.0
+      );
+
+      log('Incoming call ended, number: $number, duration $duration s');
+      Text("call end ");
+      break;
+    case PhoneStateBackgroundEvent.outgoingstart:
+
+      Fluttertoast.showToast(
+          msg: 'Outgoing call start, number: $number, duration: $duration s',
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 100,
+          textColor: Colors.green,
+          fontSize: 16.0
+      );
+
+      log('Outgoing call start, number: $number, duration: $duration s');
+      break;
+    case PhoneStateBackgroundEvent.outgoingend:
+      Fluttertoast.showToast(
+          msg: 'Outgoing call ended, number: $number, duration: $duration s',
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 100,
+          textColor: Colors.red,
+          fontSize: 16.0
+      );
+      log('Outgoing call ended, number: $number, duration: $duration s');
+      break;
+  }
+}
+
+
+// show pop up incoming call like a trucaller  code end.
+
+
+
+
+
+
+
+
+
+
 class HomeScreen extends StatefulWidget {
   final String? id,token,mobile;
   const HomeScreen({Key? key, required this.id, required this.token, required this.mobile}) : super(key: key);
@@ -21,7 +141,54 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
+// show pop up incoming call like a trucaller  code started.
+  bool hasPermission = false;
+
+  @override
+  Future<void> didChangeAppLifecycleState(AppLifecycleState state) async {
+    if (state == AppLifecycleState.resumed) {
+      await _hasPermission();
+    }
+  }
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addObserver(this);
+    _hasPermission();
+    _requestPermission();
+    _init();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  Future<void> _hasPermission() async {
+    final permission = await PhoneStateBackground.checkPermission();
+    if (mounted) {
+      setState(() => hasPermission = permission);
+    }
+  }
+
+  Future<void> _requestPermission() async {
+    await PhoneStateBackground.requestPermissions();
+  }
+
+ /* Future<void> _stop() async {
+    await PhoneStateBackground.stopPhoneStateBackground();
+  }*/
+
+  Future<void> _init() async {
+    if (hasPermission != true) return;
+    await PhoneStateBackground.initialize(phoneStateBackgroundCallbackHandler);
+  }
+
+// show pop up incoming call like a trucaller  code end.
+
 
   final ScrollController _homeController = ScrollController();
 

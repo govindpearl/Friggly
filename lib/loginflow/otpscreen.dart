@@ -216,7 +216,7 @@ class _OtpscreenState extends State<Otpscreen> {
     //print("user data>>>>>>>>>"+data.toString());
     print("New Data>>>>>>>>> $newData");
 
-    Fluttertoast.showToast(msg: data.toString());
+    //Fluttertoast.showToast(msg: data.toString());
 
 
     if (response.statusCode == 201) {
@@ -226,14 +226,14 @@ class _OtpscreenState extends State<Otpscreen> {
       print("user created");
       Fluttertoast.showToast(msg: "user created");
       Navigator.push(context, MaterialPageRoute(builder: (context) =>  PrivacyPage(token: data['api_token'],mobile: widget.mobileno),));
-      Fluttertoast.showToast(msg: "Status code 201");
+     // Fluttertoast.showToast(msg: "Status code 201");
     }
     else if(response.statusCode == 202){
       print("user data>>>>>>>>> second time "+data.toString());
 
       //print(data.toString());
 
-      Fluttertoast.showToast(msg: "Status code 202");
+      //Fluttertoast.showToast(msg: "Status code 202");
 
       //AppPreferences.saveCredentials(id: '', token: data['token'], phoneNumber: '');
       Fluttertoast.showToast(msg: "User registered but profile not created");
@@ -245,39 +245,12 @@ class _OtpscreenState extends State<Otpscreen> {
       print("user data>>>>>>>>> last time " + data.toString());
 
       // AppPreferences.saveCredentials(id: data['userdata']['id'].toString(), token: data['token'], phoneNumber: data['userData']['mobileNo'].toString());
-      Fluttertoast.showToast(msg: "User already exist");
-      Fluttertoast.showToast(msg: "Status code 200");
+      //Fluttertoast.showToast(msg: "User already exist");
+      //Fluttertoast.showToast(msg: "Status code 200");
       AppPreferences.saveCredentials(
           id: data['userData']['id'].toString(), token: data['token'], phoneNumber: data['userData']['mobileNo'].toString());
       Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen(id:data['userData']['id'].toString(), token:data['token'], mobile:data['userData']['mobileNo'].toString(),)));
 
-
-
-      /*Dio dio = Dio();
-      Options options = Options(
-        headers: {
-          'Authorization': 'Bearer ${data['api_token']}',
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        },
-      );
-
-      Response? response1 = await dio.post("https://test.pearl-developer.com/friglly/public/api/register",
-          data: jsonEncode({'mobileNo':widget.mobileno }),
-          options: options
-      );
-      if(response == null){
-
-      }else if(response1.data['status'] == '301'){
-        print(response1)
-        print('123456------');
-
-
-      }else if(response1.data['status'] != '301'){
-
-      }else{
-
-      }*/
 
 
     }

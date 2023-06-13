@@ -1,15 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:geolocator/geolocator.dart';
+import 'package:http/http.dart' as http;
 
 
 class AddressDialog extends StatefulWidget {
+
+   final String? mobile;
+
+   AddressDialog({Key? key,this.mobile}) : super(key: key);
   @override
   _AddressDialogState createState() => _AddressDialogState();
 }
 
 class _AddressDialogState extends State<AddressDialog> {
   List<int> selectedItems = [];
+  String listItem = '';
+
 
   void selectItem(int index) {
     setState(() {
@@ -24,11 +30,28 @@ class _AddressDialogState extends State<AddressDialog> {
 
 
   String rate = "";
+  TextEditingController review = TextEditingController();
+
+ // List<int> index = [1,2,3,4];
+  //String listItem = '';
+  // index.forEach((element) {
+  // print(element);
+  // listItem += element.toString()+', ';
+  //
+  // });
 
 
   @override
   Widget build(BuildContext context) {
+    selectedItems.forEach((element) {
+      print("elementss${element}");
+  listItem = element.toString()+', ';
+  print("list irms ${listItem}");
+
+  });
+
     print(selectedItems);
+   // print(selectedItems);
 
     return SafeArea(
       child: Dialog(
@@ -42,6 +65,7 @@ class _AddressDialogState extends State<AddressDialog> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
+                Text("${widget.mobile}"),
                 Text(
                   'Govind',
                   style: TextStyle(
@@ -65,11 +89,18 @@ class _AddressDialogState extends State<AddressDialog> {
                         color: Colors.amber,
                       ),
                       onRatingUpdate: (rating) {
-                        print(rating);
+
+                        print("helloo${rating}");
+
                         setState(() {
                           rate = rating.toString();
                         });
+
+
+                        print("print rate ${rate}");
+
                       },
+
                     ),
                   ],
                 ),
@@ -95,6 +126,7 @@ class _AddressDialogState extends State<AddressDialog> {
                           ),
                         ),
                       ),
+
                       Expanded(
                         child: GridView.builder(
                           itemCount: 7,
@@ -104,37 +136,51 @@ class _AddressDialogState extends State<AddressDialog> {
                           itemBuilder: (BuildContext context, int index) {
                             return GestureDetector(
                               onTap: () => selectItem(index),
-                              child: Container(
-                                margin: EdgeInsets.all(10),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  image: DecorationImage(
-                                    image: AssetImage('assets/extrovert.jpg'),
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                                child: Stack(
-                                  children: [
-                                    Positioned(
-                                      //top:12,
-                                      bottom: 1,
-                                      child: Text(
-                                        'Extrovert ${index + 1}',
-                                        style: TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.bold,
+                              child: Column(
+                                children: [
+                                  Expanded(
+                                    child: Container(
+                                      margin: EdgeInsets.all(10),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10),
+                                        image: DecorationImage(
+                                          image: AssetImage('assets/extrovert.jpg'),
+                                          fit: BoxFit.cover,
                                         ),
                                       ),
-                                    ),
+                                      child: Stack(
+                                        children: [
+                                          Positioned(
+                                            //top:12,
+                                            bottom: 1,
+                                            child: Text(
+                                              '',
+                                              //'Extrovert ${index + 1}',
+                                              style: TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ),
+                                          if (selectedItems.contains(index))
+                                            Container(
+                                              color: Colors.black.withOpacity(0.5),
+                                            ),
 
-                                    if (selectedItems.contains(index))
-
-                                      Container(
-                                        color: Colors.black.withOpacity(0.5),
+                                        ],
                                       ),
-                                  ],
-                                ),
+                                    ),
+                                  ),
+                                  Text(
+                                    'Extrovert ${index + 1}',
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
                               ),
                             );
                           },
@@ -297,7 +343,7 @@ class _AddressDialogState extends State<AddressDialog> {
                 TextField(
                   minLines: 8,
                   maxLines: 10,
-
+                   controller: review,
                   textInputAction: TextInputAction.newline,
 
                   textAlignVertical: TextAlignVertical.top,
@@ -325,7 +371,11 @@ class _AddressDialogState extends State<AddressDialog> {
                       ),
                     ),
                     InkWell(
-                      onTap:  () {},
+                      onTap:  () {
+
+                        Ratereview(widget.mobile.toString(),selectedItems.toString(),rate,review.text.toString());
+
+                      },
                       child: Text(
                         'Done',
                         style: TextStyle(
@@ -343,4 +393,37 @@ class _AddressDialogState extends State<AddressDialog> {
       ),
     );
   }
+
+Future<void> Ratereview(mobile,trait,ratee,revieww,)  async{
+
+  var headers = {
+    'Authorization': 'Bearer 454|65p7NxrKrnzFMpwEM6UZxP62SbK8XIZDJbKhxXbS'
+  };
+  var request = http.MultipartRequest('POST', Uri.parse('https://test.pearl-developer.com/friglly/public/api/update-contact'));
+  request.fields.addAll({
+    'contact_number': mobile,
+    'traits': trait,
+    'rating': ratee,
+    'contact_name': revieww
+  });
+
+  request.headers.addAll(headers);
+
+  http.StreamedResponse response = await request.send();
+
+  if (response.statusCode == 200) {
+    print("api rate print mobile number ${mobile}");
+    print("api rate print trait        ${trait}");
+    print("api rate print ratee        ${ratee}");
+    print("api rate print revieww      ${revieww}");
+
+    print(await response.stream.bytesToString());
+  }
+  else {
+    print(response.reasonPhrase);
+  }
+
+
+}
+
 }

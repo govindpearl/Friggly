@@ -585,7 +585,7 @@ class _Friends_ProfileState extends State<Friends_Profile> {
                             )
                         ),
                         onPressed: (){
-                         Navigator.push(context, MaterialPageRoute(builder: (context)=>AddressDialog()));
+                         Navigator.push(context, MaterialPageRoute(builder: (context)=>AddressDialog(mobile:widget.mobile)));
 
                         },
                         child:  Text("Rate Now",style: TextStyle(color: Colors.black),)
