@@ -1,6 +1,11 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
+import 'API_COLLECTION.dart';
+import 'ModelClass/Get_Traits_Model.dart';
+import 'app_preferences.dart';
 
 
 class AddressDialog extends StatefulWidget {
@@ -65,7 +70,7 @@ class _AddressDialogState extends State<AddressDialog> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Text("${widget.mobile}"),
+              //  Text("${widget.mobile}"),
                 Text(
                   'Govind',
                   style: TextStyle(
@@ -110,7 +115,7 @@ class _AddressDialogState extends State<AddressDialog> {
 
 
                 Container(
-                  height:300,
+                  height:230,
 
                   child: Column(
 
@@ -127,65 +132,93 @@ class _AddressDialogState extends State<AddressDialog> {
                         ),
                       ),
 
-                      Expanded(
-                        child: GridView.builder(
-                          itemCount: 7,
-                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 3,
-                          ),
-                          itemBuilder: (BuildContext context, int index) {
-                            return GestureDetector(
-                              onTap: () => selectItem(index),
-                              child: Column(
-                                children: [
-                                  Expanded(
-                                    child: Container(
-                                      margin: EdgeInsets.all(10),
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(10),
-                                        image: DecorationImage(
-                                          image: AssetImage('assets/extrovert.jpg'),
-                                          fit: BoxFit.cover,
-                                        ),
-                                      ),
-                                      child: Stack(
-                                        children: [
-                                          Positioned(
-                                            //top:12,
-                                            bottom: 1,
-                                            child: Text(
-                                              '',
-                                              //'Extrovert ${index + 1}',
+
+
+
+
+                        FutureBuilder<Get_Traits_Model?>(
+                          future: traits(),
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              // API call succeeded, use the data
+
+                              return // Text(snapshot!.data!.traits![0].traitName.toString());
+
+                                Expanded(
+                                  child: GridView.builder(
+                                    itemCount: snapshot.data!.traits!.length,
+                                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 3,
+                                    ),
+                                    itemBuilder: (BuildContext context, int index) {
+                                      return GestureDetector(
+                                        onTap: () => selectItem(index),
+                                        child: Column(
+                                          children: [
+                                            Expanded(
+                                              child: Container(
+                                                margin: EdgeInsets.all(10),
+                                                decoration: BoxDecoration(
+                                                  borderRadius: BorderRadius.circular(10),
+                                                  image:
+
+                                                  DecorationImage(
+                                                    image:
+                                                        NetworkImage(snapshot!.data!.traits![index].traitImage.toString()),
+                                                    //AssetImage('assets/extrovert.jpg'),
+                                                    fit: BoxFit.cover,
+                                                  ),
+                                                ),
+                                                child: Stack(
+                                                  children: [
+                                                    Positioned(
+                                                      //top:12,
+                                                      bottom: 1,
+                                                      child: Text(
+                                                        '',
+                                                        //'Extrovert ${index + 1}',
+                                                        style: TextStyle(
+                                                          color: Colors.black,
+                                                          fontSize: 12,
+                                                          fontWeight: FontWeight.bold,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    if (selectedItems.contains(index))
+                                                      Container(
+                                                        color: Colors.black.withOpacity(0.5),
+                                                      ),
+
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+
+                                            Text(
+                                              '${snapshot.data!.traits![index].traitName.toString()}',
                                               style: TextStyle(
                                                 color: Colors.black,
                                                 fontSize: 12,
                                                 fontWeight: FontWeight.bold,
                                               ),
                                             ),
-                                          ),
-                                          if (selectedItems.contains(index))
-                                            Container(
-                                              color: Colors.black.withOpacity(0.5),
-                                            ),
+                                          ],
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                );
 
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                  Text(
-                                    'Extrovert ${index + 1}',
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            );
+
+                            } else if (snapshot.hasError) {
+                              // API call failed, show error message
+                              return Text('Error: ${snapshot.error}');
+                            }
+
+                            // API call still in progress, show a loading indicator
+                            return Center(child: CircularProgressIndicator());
                           },
                         ),
-                      ),
                     ],
                   ),
                 ),
@@ -356,6 +389,7 @@ class _AddressDialogState extends State<AddressDialog> {
                     fillColor: Color(0xffE8E8E8),
                   ),
                 ),
+                SizedBox(height: 15,),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -366,6 +400,7 @@ class _AddressDialogState extends State<AddressDialog> {
                       child: Text(
                         'Cancel',
                         style: TextStyle(
+                          fontSize: 20,
                           color: Colors.orangeAccent,
                         ),
                       ),
@@ -374,11 +409,11 @@ class _AddressDialogState extends State<AddressDialog> {
                       onTap:  () {
 
                         Ratereview(widget.mobile.toString(),selectedItems.toString(),rate,review.text.toString());
-
                       },
                       child: Text(
                         'Done',
                         style: TextStyle(
+                          fontSize: 20,
                           color: Colors.orangeAccent,
                         ),
                       ),
@@ -397,9 +432,10 @@ class _AddressDialogState extends State<AddressDialog> {
 Future<void> Ratereview(mobile,trait,ratee,revieww,)  async{
 
   var headers = {
-    'Authorization': 'Bearer 454|65p7NxrKrnzFMpwEM6UZxP62SbK8XIZDJbKhxXbS'
+    'Authorization': 'Bearer ${AppPreferences.getToken()}'
   };
-  var request = http.MultipartRequest('POST', Uri.parse('https://test.pearl-developer.com/friglly/public/api/update-contact'));
+
+  var request = http.MultipartRequest('POST', Uri.parse(UPDATE_CONTACTS_URL));
   request.fields.addAll({
     'contact_number': mobile,
     'traits': trait,
@@ -412,18 +448,67 @@ Future<void> Ratereview(mobile,trait,ratee,revieww,)  async{
   http.StreamedResponse response = await request.send();
 
   if (response.statusCode == 200) {
+    Fluttertoast.showToast(msg: "Review update Successfully",textColor: Colors.green);
     print("api rate print mobile number ${mobile}");
     print("api rate print trait        ${trait}");
     print("api rate print ratee        ${ratee}");
     print("api rate print revieww      ${revieww}");
 
     print(await response.stream.bytesToString());
+    Navigator.pop(context);
+
   }
   else {
+    Fluttertoast.showToast(msg: "Server error",textColor: Colors.red);
+
     print(response.reasonPhrase);
   }
 
 
 }
+
+
+
+
+
+
+  Future<Get_Traits_Model?> traits() async {
+    // Create Dio instance
+    Dio dio = Dio();
+
+    // Define the headers
+    Map<String, String> headers = {
+      'Authorization': 'Bearer ${AppPreferences.getToken()}'
+      //'Authorization': 'Bearer 272|zOSOR7ks4vioa05Rp8YwM61GTFAIpybBUSiX3WYv',
+    };
+
+    // Define the API endpoint
+    String url = GET_TRAITS_URL;
+
+    try {
+      // Make the API call
+      Response response = await dio.get(url, options: Options(headers: headers));
+
+      // Handle the response
+      if (response.statusCode == 200) {
+        return Get_Traits_Model.fromJson(response.data);
+
+        // API call successful
+        print(response.data);
+      } else {
+        // API call failed
+        print('API call failed with status code ${response.statusCode}');
+      }
+    } catch (error) {
+      // Handle any errors
+      print('An error occurred: $error');
+    }
+  }
+
+
+
+
+
+
 
 }

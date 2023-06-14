@@ -151,7 +151,8 @@ class _CallLogScreenState extends State<CallLogScreen> {
 
                     List<CallLogEntry> entries = snapshot.data!.toList();
 
-                    return Scrollbar(
+                    return
+                      Scrollbar(
                       child:
 
 

@@ -1,23 +1,17 @@
 import 'dart:convert';
-
-import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:friggly/app_preferences.dart';
 import 'package:friggly/loginflow/mobilenumber.dart';
 import 'package:http/http.dart' as http;
-
-import 'package:intl_phone_field/phone_number.dart';
-
 import 'package:otp_timer_button/otp_timer_button.dart';
 import 'package:pinput/pinput.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
+import '../API_COLLECTION.dart';
 import '../Home/MainHomeScreen.dart';
 import '../yourprivacyscreen.dart';
-import 'Signupscreen.dart';
+
+
 class Otpscreen extends StatefulWidget {
   final String? mobile,mobileno;
   const Otpscreen({Key? key, this.mobile, this.mobileno}) : super(key: key);
@@ -205,7 +199,7 @@ class _OtpscreenState extends State<Otpscreen> {
 
   registerdmobile(mobile)async{
 
-    var request = http.MultipartRequest('POST', Uri.parse('https://test.pearl-developer.com/friglly/public/api/register'));
+    var request = http.MultipartRequest('POST', Uri.parse(REGISTRATION_URL));
     request.fields.addAll({
       'mobileNo': mobile
     });

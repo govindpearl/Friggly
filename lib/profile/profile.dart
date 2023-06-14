@@ -1,21 +1,13 @@
 import 'dart:io';
-
-import 'package:animated_text_lerp/animated_text_lerp.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 import 'package:friggly/app_preferences.dart';
-//import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
-import 'package:marquee/marquee.dart';
-import 'package:marquee_text/marquee_text.dart';
-
+import '../API_COLLECTION.dart';
 import '../Settingscreen.dart';
-import '../loginflow/otpscreen.dart';
-import '../rate&rafer/raterafer.dart';
-
 
 class userpost extends StatefulWidget {
   const userpost({Key? key}) : super(key: key);
@@ -365,55 +357,13 @@ SizedBox(width: 8,),
     ));
   }
 
-
-/*  Future<List<Users>> userlist(Email) async {
-    List<Users> list = [];
-    var headers = {
-      'Authorization': 'Bearer '+"${AppPreferences.getToken()!}"
-    };
-    var request = http.MultipartRequest('POST', Uri.parse('https://test.pearl-developer.com/mdk/public/api/user-list'));
-    request.fields.addAll({
-      'email': Email,
-      //'email': 'govindkumar@gmail.com'
-    });
-
-    request.headers.addAll(headers);
-
-    http.StreamedResponse response = await request.send();
-
-    if (response.statusCode == 200) {
-
-      await response.stream.bytesToString().then((value) async {
-        var data = await jsonDecode(value);
-        //print(data['users']);
-        if(data['status'] == "201"){
-          //print(data['users']);
-
-          for(var item in data['users']){
-            list.add(Users.fromJson(item));
-            //Users new = Users(data['status'], );
-            //print('<------${item}');
-          }
-
-          print('<------------${list[2].email}');
-        }
-      });
-    }
-    else {
-      print(response.reasonPhrase);
-    }
-    return list;
-  }*/
-
-
-
   getprofile ()async{
 
     var headers = {
       //'Authorization': 'Bearer 231|ZkFaSlU3awK2ZvDaNONWGnG450cgvKQAL7lajvpn'
       'Authorization': 'Bearer ${AppPreferences.getToken()}'
     };
-    var request = http.Request('GET', Uri.parse('https://test.pearl-developer.com/friglly/public/api/get-profile'));
+    var request = http.Request('GET', Uri.parse(GET_PROFILE_URL));
 
     request.headers.addAll(headers);
 

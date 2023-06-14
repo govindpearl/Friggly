@@ -1,13 +1,9 @@
-import 'dart:convert';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:intl_phone_field/countries.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
-
 import 'otpscreen.dart';
 class Myphone extends StatefulWidget {
   const Myphone({Key? key}) : super(key: key);
@@ -157,40 +153,6 @@ class _MyphoneState extends State<Myphone> {
           ),
         )),);
   }
-
-
-
-
-
-/* registerdmobile(mobile)async{
-
-    var request = http.MultipartRequest('POST', Uri.parse('https://test.pearl-developer.com/friglly/public/api/register'));
-    request.fields.addAll({
-      'mobileNo': mobile
-    });
-
-
-    http.StreamedResponse response = await request.send();
-
-    if (response.statusCode == 201) {
-      print("user created");
-      Fluttertoast.showToast(msg: "user created");
-      print("hello world >>"+await response.stream.bytesToString());
-      print(response.statusCode.toString());
-    }
-    else if(response.statusCode == 200){
-
-      print("User already exist");
-      Fluttertoast.showToast(msg: "User already exist");
-    }
-    else {
-      print(response.statusCode);
-      print("User registered but profile not created");
-      Fluttertoast.showToast(msg: "User registered but profile not created");
-    }
-
-  }*/
-
 
 
 }

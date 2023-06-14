@@ -1,16 +1,11 @@
-import 'dart:convert';
 import 'dart:io';
-import 'package:country_state_city_picker/country_state_city_picker.dart';
 import 'package:dio/dio.dart';
-import 'package:dob_input_field/dob_input_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:http/http.dart' as http;
-
-
+import '../API_COLLECTION.dart';
 import '../ModelClass/user_profile_model.dart';
 import '../Settingscreen.dart';
 import '../app_preferences.dart';
@@ -210,7 +205,9 @@ class _Profile_newState extends State<Profile_new> {
 
                           if (snapshot.hasData) {
 
-                            return      Column(
+                            return
+
+                              Column(
                               children: [
 
 
@@ -588,29 +585,6 @@ class _Profile_newState extends State<Profile_new> {
     );
   }
 
-
-/*  Future<User_Profile_model?> getprofiledata() async {
-    var headers = {
-      'Authorization': 'Bearer 213|IZgkzEIFEZqN4n9GMIlGJeKW0NOPgiBGUvHobCsE'
-    };
-
-    var request = Dio.get('https://test.pearl-developer.com/friglly/public/api/get-profile');
-
-    request.headers.addAll(headers);
-
-    http.StreamedResponse response = await request.send();
-
-    if (response.statusCode == 200) {
-      print(await response.[''].bytesToString());
-      //print(await response.stream.bytesToString());
-    }
-    else {
-    print(response.reasonPhrase);
-    }
-
-  }*/
-
-
   Future<User_Profile_model?> getprofiledata() async {
     // Create Dio instance
     Dio dio = Dio();
@@ -622,7 +596,7 @@ class _Profile_newState extends State<Profile_new> {
     };
 
     // Define the API endpoint
-    String url = 'https://test.pearl-developer.com/friglly/public/api/get-profile';
+    String url = GET_PROFILE_URL;
 
     try {
       // Make the API call
@@ -643,35 +617,6 @@ class _Profile_newState extends State<Profile_new> {
       print('An error occurred: $error');
     }
   }
-
-
-
-
-
-
-/*  Future<User_Profile_model?> makeApiCall() async {
-    var headers = {
-      'Authorization': 'Bearer 213|IZgkzEIFEZqN4n9GMIlGJeKW0NOPgiBGUvHobCsE'
-    };
-
-    var request = http.Request('GET', Uri.parse('https://test.pearl-developer.com/friglly/public/api/get-profile'));
-    request.headers.addAll(headers);
-
-    http.StreamedResponse response = await request.send();
-
-    if (response.statusCode == 200) {
-      var responseBody = await response.stream.bytesToString();
-      List<dynamic> dataList = jsonDecode(responseBody);
-
-      // Use the dataList as a list in your Flutter application
-      print(dataList);
-    } else {
-      print(response.reasonPhrase);
-    }
-  }*/
-
-
-
 
 
 }

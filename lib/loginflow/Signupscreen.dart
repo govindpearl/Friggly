@@ -1,19 +1,14 @@
 import 'dart:io';
-import 'package:country_state_city_picker/country_state_city_picker.dart';
 import 'package:dio/dio.dart';
-import 'package:dob_input_field/dob_input_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gender_picker/source/gender_picker.dart';
 import 'package:gender_picker/source/enums.dart';
-
 import 'package:google_fonts/google_fonts.dart';
-import 'dart:convert';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:intl_phone_field/intl_phone_field.dart';
-
+import '../API_COLLECTION.dart';
 import '../Home/MainHomeScreen.dart';
 import '../app_preferences.dart';
 import 'package:dio/dio.dart' as dio;
@@ -153,30 +148,7 @@ class _signupscreenState extends State<signupscreen> {
   var _password = '';
   var _confirmPassword = '';
 
-/*  void signUpUser() async {
-    if (_password != _confirmPassword){ // you can add your statements here
-      Fluttertoast.showToast(msg: "Password does not match. Please re-type again.");
-    }
 
-    // else if (response.statusCode == 400) {
-    //   Fluttertoast.showToast(msg: "already registerd");
-    // }
-
-    else {
-      Fluttertoast.showToast(msg: "You are registerd successfuly. You can login now");
-
-      Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) =>  signinscreen())
-      );
-
-      // FirebaseAuthMethods(FirebaseAuth.instance).signUpWithEmail(
-      //   email: emailController.text,
-      //   password: passwordController.text,
-      //   context: context,
-      // );
-    }
-  }*/
 
 
   TextEditingController emailController =   TextEditingController();
@@ -186,113 +158,6 @@ class _signupscreenState extends State<signupscreen> {
   TextEditingController passwordController =  TextEditingController();
   TextEditingController confirmpasswordController =  TextEditingController();
   TextEditingController dateInputController = TextEditingController();
-
-/*  Future loginc( email , password) async {
-
-    try{
-
-      Response response = await post(
-          Uri.parse('https://test.pearl-developer.com/mdk/public/api/signin_up'),
-          body: {
-            'email' : email,
-            'password' : password
-          }
-      );
-
-      if(response.statusCode == 200){
-
-        var data = jsonDecode(response.body);
-        print(data['token']);
-        print('Login successfully');
-
-      }else {
-        print('failed');
-      }
-    }catch(e){
-      print(e);
-    }
-  }*/
-
-  // Future login( name,phone,email,password,)async{
-  //   try{
-  //
-  //     //var request = http.MultipartRequest('POST', Uri.parse('https://test.pearl-developer.com/mdk/public/api/signup'));
-  //     /*     request.fields.addAll({
-  //       'name': name,
-  //       'phone': phone,
-  //       'email': email,
-  //       'password': password,
-  //       'image_ext': '.png'
-  //     });*/
-  //
-  //     var body = json.encode({
-  //       'name': name,
-  //       'phone': phone,
-  //       'email': email,
-  //       'password': password,
-  //       'image_ext': '.png'
-  //     });
-  //     var  url = "https://test.pearl-developer.com/mdk/public/api/signup";
-  //     var response= await http.post(Uri.parse(url),headers: {
-  //       'Content-type': 'application/json',
-  //       'Accept': 'application/json',
-  //     },
-  //
-  //       body: body,
-  //     );
-  //
-  //     /*  Response response = await post(
-  //         Uri.parse('https://test.pearl-developer.com/mdk/public/api/signup'),
-  //         body: {
-  //           'email' : emailController,
-  //           'password' : passwordController,
-  //           'name': 'govind rajpoot',
-  //           'phone': '7500620349',
-  //           'image_ext': '.png'
-  //         }
-  //     );*/
-  //     // http.StreamedResponse response = await request.send();
-  //
-  //
-  //
-  //     if (response.statusCode == 201) {
-  //       var data = jsonDecode(response.body);
-  //       print("token id "+data['token']);
-  //       print('Login successfully');
-  //       //print("Govind>>>>>"+await response.stream.bytesToString());
-  //       print("Govind   "+response.toString());
-  //       Fluttertoast.showToast(msg: "registerd");
-  //      // AppPreferences.saveToken(token: data['token']);
-  //       // Navigator.push(
-  //       //     context,
-  //       //     MaterialPageRoute(builder: (context) =>  HomeScreen()));
-  //
-  //     }
-  //     else if (response.statusCode == 400) {
-  //       Fluttertoast.showToast(
-  //           msg: "Already registerd",
-  //           toastLength: Toast.LENGTH_SHORT,
-  //           gravity: ToastGravity.BOTTOM,
-  //           timeInSecForIosWeb: 1,
-  //           textColor: Colors.black,
-  //           backgroundColor: Colors.red,
-  //           fontSize: 16.0
-  //       );
-  //     }
-  //
-  //     else {
-  //       Fluttertoast.showToast(msg: "Internal server error");
-  //
-  //       print("status code signup""${response.statusCode}");
-  //       print("testinggg"+response.reasonPhrase.toString());
-  //       print('failedd');
-  //     }
-  //   }
-  //   catch(e){
-  //     print(e);
-  //   }
-  // }
-
 
 
 
@@ -567,7 +432,6 @@ class _signupscreenState extends State<signupscreen> {
           )
       ),
     );
-
   }
 
 
@@ -597,8 +461,7 @@ class _signupscreenState extends State<signupscreen> {
         'image': await dio.MultipartFile.fromFile(image),
       });
 
-      var response = await dioInstance.post(
-        'https://test.pearl-developer.com/friglly/public/api/create-profile',
+      var response = await dioInstance.post(SIGN_UP_URL,
         data: formData,
         options: dio.Options(headers: headers),
       );
@@ -616,7 +479,7 @@ class _signupscreenState extends State<signupscreen> {
               'Content-Type': 'application/json',
             },
           );
-          Response response = await _dio.get("https://test.pearl-developer.com/friglly/public/api/get-profile", options: options);
+          Response response = await _dio.get(GET_PROFILE_URL, options: options);
           print("dio respose with id ${response}");
 
           if(response.data['status']=='201'){
@@ -671,66 +534,6 @@ class _signupscreenState extends State<signupscreen> {
       Fluttertoast.showToast(msg: "An error occurred");
     }
   }
-
-
-
-
-/* signupp(name,email,date,image) async {
-               var headers = {
-                 //'Authorization': 'Bearer ${AppPreferences.getToken()}'
-               //'Authorization': 'Bearer 313|HJSyeBC9lESl2drJwHu3UaP4gL4AsJwkT44mlNT4'
-               'Authorization': 'Bearer ${widget.token}'
-               //'Authorization': widget.token
-
-               };
-               var request = http.MultipartRequest('POST', Uri.parse('https://test.pearl-developer.com/friglly/public/api/create-profile'));
-               request.fields.addAll({
-                 'name': name,
-                 'email': email,
-                 'dob': date,
-                 'gender': 'Male',
-               });
-               request.files.add(await http.MultipartFile.fromPath('image',image));
-               request.headers.addAll(headers);
-
-               http.StreamedResponse response = await request.send();
-               final data = jsonDecode(await response.stream.bytesToString());
-               print("govind registerd data>>>>>>>>>>${data}");
-
-               if (response.statusCode == 200) {
-
-
-                 Navigator.push(context, MaterialPageRoute(builder: (context) =>  HomeScreen(id:data['userData']['id'],token: data['api_token'],mobile: data['userData']['mobileNo'])));
-*//*
-                 print(await response.stream.bytesToString());
-                 print("Govind Email"+"${emailController.text}");
-                 print("Govind name"+"${nameController.text}");
-                 print("Govind Dob"+"${dateInputController.text}");*//*
-                 print("govind >>>>>>>>>>${data}");
-                 Fluttertoast.showToast(msg: "registerd");
-                 AppPreferences.saveCredentials(
-                     id: data['userData']['id'], token: data['token'], phoneNumber: data['userData']['mobileNo']);
-                // Navigator.push(context, MaterialPageRoute(builder: (context) =>  HomeScreen()));
-
-
-               }
-               else {
-                 print("Govind Email"+"${emailController.text}");
-                 print("Govind name"+"${nameController.text}");
-                 print("Govind Dob"+"${dateInputController.text}");
-
-
-
-                 print(response.reasonPhrase);
-                 print(await response.stream.bytesToString());
-                 Fluttertoast.showToast(msg: "failed");
-
-               }
-
-
-
-             }*/
-
 
 }
 

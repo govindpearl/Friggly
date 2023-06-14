@@ -1,20 +1,12 @@
 import 'dart:convert';
-import 'dart:math';
-
 import 'package:contacts_service/contacts_service.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
-import 'package:internet_popup/internet_popup.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:http/http.dart' as http;
-
+import '../API_COLLECTION.dart';
 import '../Leaderboard/leaderboardscreen.dart';
-import '../RATE/Gride_View.dart';
 import '../app_preferences.dart';
 import '../profile/friends_profile.dart';
 
@@ -103,7 +95,7 @@ class _contlistState extends State<contlist> {
           Dio dio = Dio();
           //var contacts = jsonEncode(jsonObject);
           print('object: $jsonObject');
-          final response = await dio.post('https://test.pearl-developer.com/friglly/public/api/addContact',
+          final response = await dio.post(ADD_CONTACT_URL,
               data: jsonEncode({
                 "sender_id": "${AppPreferences.getSenderId()}",
                 "contacts": jsonObject
@@ -240,9 +232,11 @@ class _contlistState extends State<contlist> {
                                         subtitle: Row(
                                           children: [
 
-                                            Text(contact.phones!.isNotEmpty
-                                                ? contact.phones!.first.value.toString()
-                                                : 'No phone number',style: TextStyle(color: Colors.white),),
+                                            Flexible(
+                                              child: Text(contact.phones!.isNotEmpty
+                                                  ? contact.phones!.first.value.toString()
+                                                  : 'No phone number',style: TextStyle(color: Colors.white),),
+                                            ),
 
                                            /*
                                            RatingBar.builder(
