@@ -304,43 +304,45 @@ class _Profile_newState extends State<Profile_new> {
 
                                 SizedBox(height: 20,),
 
-                                Container(
-                                  color: Colors.white,
-                                  // height: 60,
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Row(
-                                        children: [
-                                          Text("Rating",style:TextStyle(fontSize: 20,fontWeight: FontWeight.w500),),
-                                          RatingBar.builder(
-                                            initialRating: 0,
-                                            minRating: 1,
-                                            direction: Axis.horizontal,
-                                            allowHalfRating: true,
-                                            itemCount: 5,
-                                            itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
-                                            itemBuilder: (context, _) => Icon(
-                                              Icons.star,
-                                              color: Colors.amber,
-                                            ),
-                                            onRatingUpdate: (rating) {
-                                              print(rating);
-                                              setState(() {
-                                                rate=rating.toString();
-                                              });
-                                            },
-                                          ),
-                                          Spacer(),
-                                          Text(rate)
+                                // Rating
 
-
-                                        ],
-                                      ),
-
-                                    ],
-                                  ),
-                                ),
+                                // Container(
+                                //   color: Colors.white,
+                                //   // height: 60,
+                                //   child: Column(
+                                //     crossAxisAlignment: CrossAxisAlignment.start,
+                                //     children: [
+                                //       Row(
+                                //         children: [
+                                //           Text("Rating",style:TextStyle(fontSize: 20,fontWeight: FontWeight.w500),),
+                                //           RatingBar.builder(
+                                //             initialRating: 0,
+                                //             minRating: 1,
+                                //             direction: Axis.horizontal,
+                                //             allowHalfRating: true,
+                                //             itemCount: 5,
+                                //             itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
+                                //             itemBuilder: (context, _) => Icon(
+                                //               Icons.star,
+                                //               color: Colors.amber,
+                                //             ),
+                                //             onRatingUpdate: (rating) {
+                                //               print(rating);
+                                //               setState(() {
+                                //                 rate=rating.toString();
+                                //               });
+                                //             },
+                                //           ),
+                                //           Spacer(),
+                                //           Text(rate)
+                                //
+                                //
+                                //         ],
+                                //       ),
+                                //
+                                //     ],
+                                //   ),
+                                // ),
 
 
                                 SizedBox(height: 20,),
@@ -354,44 +356,42 @@ class _Profile_newState extends State<Profile_new> {
                                       crossAxisAlignment: CrossAxisAlignment.center,
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
+
                                         Column(children: [
                                           CircleAvatar(
+                                            backgroundColor: Colors.grey,
                                             radius: 30,
                                             child: ClipRRect(
                                                 borderRadius:BorderRadius.circular(100),
-                                                child: Image.asset("assets/extrovert.jpg",height: 120,width: 120,)),
+                                                child: Image.asset("assets/qualitiesimages/extrovert.png",height: 120,width: 120,)),
                                           ),
-                                          Text("1"),
+
+                                          //Text(snapshot.data!.contact!.trait![0].toString()),
+                                          Text("2"),
                                           Text("Extrovert"),
                                         ],),
                                         Column(children: [
                                           CircleAvatar(
+                                            backgroundColor: Colors.grey,
                                             radius: 30,
                                             child: ClipRRect(
                                                 borderRadius:BorderRadius.circular(100),
-                                                child: Image.asset("assets/extrovert.jpg",height: 120,width: 120,)),
+                                                child: Image.asset("assets/qualitiesimages/friendly.png",height: 120,width: 120,)),
                                           ),
-                                          Text("1"),
-                                          Text("Extrovert"),
-                                        ],),
-                                        Column(children: [
-                                          CircleAvatar(
-                                            radius: 30,
-                                            child: ClipRRect(
-                                                borderRadius:BorderRadius.circular(100),
-                                                child: Image.asset("assets/extrovert.jpg",height: 120,width: 120,)),
-                                          ),
-                                          Text("1"),
+                                         // Text(snapshot.data!.contact!.trait![1].toString()),
+                                          Text("2"),
                                           Text("Friendly"),
                                         ],),
                                         Column(children: [
                                           CircleAvatar(
+                                            backgroundColor: Colors.grey,
                                             radius: 30,
                                             child: ClipRRect(
                                                 borderRadius:BorderRadius.circular(100),
-                                                child: Image.asset("assets/extrovert.jpg",height: 120,width: 120,)),
+                                                child: Image.asset("assets/qualitiesimages/intelligent.png",height: 120,width: 120,)),
                                           ),
-                                          Text("1"),
+                                          //Text(snapshot.data!.contact!.trait![2].toString()),
+                                          Text("2"),
                                           Text("Intelligent"),
                                         ],),
                                       ],
@@ -403,44 +403,49 @@ class _Profile_newState extends State<Profile_new> {
                                       children: [
                                         Column(children: [
                                           CircleAvatar(
+                                            backgroundColor: Colors.grey,
                                             radius: 30,
                                             child: ClipRRect(
                                                 borderRadius:BorderRadius.circular(100),
-                                                child: Image.asset("assets/extrovert.jpg",height: 120,width: 120,)),
+                                                child: Image.asset("assets/qualitiesimages/handsome.png",height: 120,width: 120,)),
                                           ),
-                                          Text("1"),
+                                          //Text(snapshot.data!.contact!.trait![3].toString()),
+                                          Text("2"),
                                           Text("Good Looking"),
                                         ],),
                                         Column(children: [
                                           CircleAvatar(
+                                            backgroundColor: Colors.grey,
                                             radius: 30,
                                             child: ClipRRect(
                                                 borderRadius:BorderRadius.circular(100),
-                                                child: Image.asset("assets/extrovert.jpg",height: 120,width: 120,)),
+                                                child: Image.asset("assets/qualitiesimages/patience.png",height: 120,width: 120,)),
                                           ),
-                                          Text("1"),
+                                          //Text(snapshot.data!.contact!.trait![4].toString()),
+                                          Text("2"),
                                           Text("Patient"),
                                         ],),
                                         Column(children: [
                                           CircleAvatar(
+                                            backgroundColor: Colors.grey,
                                             radius: 30,
                                             child: ClipRRect(
+
                                                 borderRadius:BorderRadius.circular(100),
-                                                child: Image.asset("assets/extrovert.jpg",height: 120,width: 120,)),
+                                                child: Image.asset("assets/qualitiesimages/trust.png",height: 120,width: 120,)),
                                           ),
-                                          Text("1"),
+                                         // Text(snapshot.data!.contact!.trait![5].toString()),
+                                          Text("2"),
                                           Text("Trustworthy"),
                                         ],),
                                       ],
                                     ),
 
 
-
-
-
-
-
                                   ],),
+
+
+
                                 SizedBox(height: 20,),
 
                                 Row(

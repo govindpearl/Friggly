@@ -10,27 +10,40 @@ import 'app_preferences.dart';
 
 class AddressDialog extends StatefulWidget {
 
-   final String? mobile;
+   final String? mobile,namee;
 
-   AddressDialog({Key? key,this.mobile}) : super(key: key);
+   AddressDialog({Key? key,this.mobile,this.namee}) : super(key: key);
   @override
   _AddressDialogState createState() => _AddressDialogState();
 }
 
 class _AddressDialogState extends State<AddressDialog> {
-  List<int> selectedItems = [];
+  List<int> selectedItems = [0,0,0,0,0,0];
   String listItem = '';
 
 
   void selectItem(int index) {
     setState(() {
-      if (selectedItems.contains(index)) {
-        selectedItems.remove(index);
-      } else {
-        selectedItems.add(index);
+      if(selectedItems[index] ==1){
+        selectedItems[index] =0;
+      }else{
+        selectedItems[index] =1;
       }
     });
   }
+
+  // void selectItem(int index) {
+  //   setState(() {
+  //     if (selectedItems.contains(index)==0) {
+  //       //selectedItems.remove(index);
+  //       selectedItems[index] =1;
+  //
+  //     } else {
+  //       selectedItems[index] =0;
+  //       //selectedItems.add(index);
+  //     }
+  //   });
+  // }
 
 
 
@@ -55,7 +68,7 @@ class _AddressDialogState extends State<AddressDialog> {
 
   });
 
-    print(selectedItems);
+    print("govind ${selectedItems}");
    // print(selectedItems);
 
     return SafeArea(
@@ -72,7 +85,7 @@ class _AddressDialogState extends State<AddressDialog> {
               children: [
               //  Text("${widget.mobile}"),
                 Text(
-                  'Govind',
+                  "${widget.namee}",
                   style: TextStyle(
                     fontSize: 20.0,
                     fontWeight: FontWeight.bold,
@@ -124,7 +137,7 @@ class _AddressDialogState extends State<AddressDialog> {
                         padding: EdgeInsets.all(10),
                         alignment: Alignment.center,
                         child: Text(
-                          'Selected qualities: ${selectedItems.length}',
+                          'Select qualities',
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
@@ -145,7 +158,8 @@ class _AddressDialogState extends State<AddressDialog> {
                               return // Text(snapshot!.data!.traits![0].traitName.toString());
 
                                 Expanded(
-                                  child: GridView.builder(
+                                  child:
+                                  GridView.builder(
                                     itemCount: snapshot.data!.traits!.length,
                                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                                       crossAxisCount: 3,
@@ -184,7 +198,9 @@ class _AddressDialogState extends State<AddressDialog> {
                                                         ),
                                                       ),
                                                     ),
-                                                    if (selectedItems.contains(index))
+
+                                                    //        selectedItems[index] =1;
+                                                    if (selectedItems[index]==1)
                                                       Container(
                                                         color: Colors.black.withOpacity(0.5),
                                                       ),

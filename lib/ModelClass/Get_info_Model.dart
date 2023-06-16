@@ -1,50 +1,69 @@
-class Get_Info_Model {
-  List<Contact>? contact;
-  String? msg;
-  String? status;
+// To parse this JSON data, do
+//
+//     final getInfoModel = getInfoModelFromJson(jsonString);
 
-  Get_Info_Model({this.contact, this.msg, this.status});
+import 'dart:convert';
 
-  Get_Info_Model.fromJson(Map<String, dynamic> json) {
-    if (json['contact'] != null) {
-      contact = <Contact>[];
-      json['contact'].forEach((v) {
-        contact!.add(new Contact.fromJson(v));
-      });
-    }
-    msg = json['msg'];
-    status = json['status'];
-  }
+GetInfoModel getInfoModelFromJson(String str) => GetInfoModel.fromJson(json.decode(str));
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.contact != null) {
-      data['contact'] = this.contact!.map((v) => v.toJson()).toList();
-    }
-    data['msg'] = this.msg;
-    data['status'] = this.status;
-    return data;
-  }
+String getInfoModelToJson(GetInfoModel data) => json.encode(data.toJson());
+
+class GetInfoModel {
+  Contact contact;
+  String msg;
+  String status;
+
+  GetInfoModel({
+    required this.contact,
+    required this.msg,
+    required this.status,
+  });
+
+  factory GetInfoModel.fromJson(Map<String, dynamic> json) => GetInfoModel(
+    contact: Contact.fromJson(json["contact"]),
+    msg: json["msg"],
+    status: json["status"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "contact": contact.toJson(),
+    "msg": msg,
+    "status": status,
+  };
 }
 
 class Contact {
-  String? contactName;
-  String? traits;
-  String? rating;
+  String contactName;
+  List<int> trait;
+  String rating;
+  int totalRatings;
+  List<int> ratingCount;
+  List<dynamic> reviews;
 
-  Contact({this.contactName, this.traits, this.rating});
+  Contact({
+    required this.contactName,
+    required this.trait,
+    required this.rating,
+    required this.totalRatings,
+    required this.ratingCount,
+    required this.reviews,
+  });
 
-  Contact.fromJson(Map<String, dynamic> json) {
-    contactName = json['contact_name'];
-    traits = json['traits'].toString();
-    rating = json['rating'].toString();
-  }
+  factory Contact.fromJson(Map<String, dynamic> json) => Contact(
+    contactName: json["contact_name"],
+    trait: List<int>.from(json["trait"].map((x) => x)),
+    rating: json["rating"],
+    totalRatings: json["total_ratings"],
+    ratingCount: List<int>.from(json["rating_count"].map((x) => x)),
+    reviews: List<dynamic>.from(json["reviews"].map((x) => x)),
+  );
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['contact_name'] = this.contactName;
-    data['traits'] = this.traits;
-    data['rating'] = this.rating;
-    return data;
-  }
+  Map<String, dynamic> toJson() => {
+    "contact_name": contactName,
+    "trait": List<dynamic>.from(trait.map((x) => x)),
+    "rating": rating,
+    "total_ratings": totalRatings,
+    "rating_count": List<dynamic>.from(ratingCount.map((x) => x)),
+    "reviews": List<dynamic>.from(reviews.map((x) => x)),
+  };
 }

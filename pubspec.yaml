@@ -64,7 +64,6 @@ dependencies:
   gender_picker: ^1.1.0
   fluttertoast: ^8.2.1
   country_state_city_picker: ^1.2.8
-  sms: ^0.2.4
   font_awesome_flutter: ^10.4.0
   internet_popup: ^1.0.8+5
   firebase_auth: ^4.6.0

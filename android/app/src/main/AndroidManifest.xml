@@ -1,20 +1,19 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.pearlorganisation.friggly">
+
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.WRITE_CONTACTS" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
     <uses-permission android:name="android.permission.READ_SMS"/>
     <uses-permission android:name="android.permission.SEND_SMS"/>
-
-
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.READ_CALL_LOG" />
-
 
     <application
         android:label="friggly"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -41,15 +40,11 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
-
         <receiver android:name="me.sodipto.phone_state_background.PhoneStateBackgroundServiceReceiver"
             android:exported="false">
             <intent-filter>
                 <action android:name="android.intent.action.PHONE_STATE" />
             </intent-filter>
         </receiver>
-
-
-
     </application>
 </manifest>

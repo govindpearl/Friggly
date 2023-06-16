@@ -18,9 +18,9 @@ import '../app_preferences.dart';
 
 class Friends_Profile extends StatefulWidget {
 
- final String? namee,mobile;
+  final String? namee,mobile;
 
-   Friends_Profile({Key? key, this.namee,this.mobile}) : super(key: key);
+  Friends_Profile({Key? key, this.namee,this.mobile}) : super(key: key);
 
   @override
   State<Friends_Profile> createState() => _Friends_ProfileState();
@@ -32,6 +32,7 @@ class _Friends_ProfileState extends State<Friends_Profile> {
   late String countryValue;
   late String stateValue;
   late String cityValue;
+  late String username="";
   String rate="";
 
 
@@ -193,26 +194,26 @@ class _Friends_ProfileState extends State<Friends_Profile> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        appBar: AppBar(),
+          appBar: AppBar(),
           body:
           SingleChildScrollView(
             child: Padding(
               padding:  EdgeInsets.only(left: 16,right: 16,top: 40,),
               child:
-              FutureBuilder<Get_Info_Model?>(
+              FutureBuilder<GetInfoModel?>(
                   future:  getinfo(),
                   builder: (context, snapshot) {
 
                     if (snapshot.hasData) {
                       print(snapshot.data!.msg.toString());
-                   // String sus= snapshot.data!.contact![0].traits![1]+"${1}";
+                      // String sus= snapshot.data!.contact![0].traits![1]+"${1}";
 
-                      int extrovertvalue = int.parse(snapshot.data!.contact![0].traits![1].toString()) + int.parse(1.toString());
+                      //int extrovertvalue = int.parse(snapshot.data!.contact![0].traits![1].toString()) + int.parse(1.toString());
 
-                      int sum = int.parse(snapshot.data!.contact![0].traits![4].toString()) + int.parse(1.toString());
+                      //int sum = int.parse(snapshot.data!.contact![0].traits![4].toString()) + int.parse(1.toString());
                       //result = sum.toString();
-                      print("traits  ${sum.toString()}");
-
+                      //print("traits  ${sum.toString()}");
+                     username= snapshot.data!.contact!.contactName.toString();
 
                       return Column(
                         children: [
@@ -258,8 +259,9 @@ class _Friends_ProfileState extends State<Friends_Profile> {
 
                           SizedBox(height: 15,),
                           // Text("Govind Rajpoot",style: TextStyle(fontWeight: FontWeight.w700,fontSize: 24),),
-                         // Text("${widget.namee}",style: TextStyle(fontWeight: FontWeight.w700,fontSize: 24),),
-                          Text(snapshot.data!.contact![0].contactName ??"user",style: TextStyle(fontWeight: FontWeight.w700,fontSize: 24),),
+                          // Text("${widget.namee}",style: TextStyle(fontWeight: FontWeight.w700,fontSize: 24),),
+
+                          Text(username,style: TextStyle(fontWeight: FontWeight.w700,fontSize: 24),),
 
 
 
@@ -374,45 +376,47 @@ class _Friends_ProfileState extends State<Friends_Profile> {
 
                           SizedBox(height: 10,),
 
-                          Container(
-                            color: Colors.white,
-                            // height: 60,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  children: [
-                                    Text("Rating",style:TextStyle(fontSize: 20,fontWeight: FontWeight.w500),),
-                                    RatingBar.builder(
-                                      initialRating: 0,
-                                      minRating: 1,
-                                      direction: Axis.horizontal,
-                                      allowHalfRating: true,
-                                      itemCount: 5,
-                                      itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
-                                      itemBuilder: (context, _) => Icon(
-                                        Icons.star,
-                                        color: Colors.amber,
-                                      ),
-                                      onRatingUpdate: (rating) {
-                                        print(rating);
-                                        setState(() {
-                                          rate=rating.toString();
-                                        });
-                                      },
-                                    ),
-                                    Spacer(),
-                                    Text(rate)
+                          // rating bar
 
+                          // Container(
+                          //   color: Colors.white,
+                          //   // height: 60,
+                          //   child: Column(
+                          //     crossAxisAlignment: CrossAxisAlignment.start,
+                          //     children: [
+                          //       Row(
+                          //         children: [
+                          //           Text("Rating",style:TextStyle(fontSize: 20,fontWeight: FontWeight.w500),),
+                          //           RatingBar.builder(
+                          //             initialRating: 0,
+                          //             minRating: 1,
+                          //             direction: Axis.horizontal,
+                          //             allowHalfRating: true,
+                          //             itemCount: 5,
+                          //             itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
+                          //             itemBuilder: (context, _) => Icon(
+                          //               Icons.star,
+                          //               color: Colors.amber,
+                          //             ),
+                          //             onRatingUpdate: (rating) {
+                          //               print(rating);
+                          //               setState(() {
+                          //                 rate=rating.toString();
+                          //               });
+                          //             },
+                          //           ),
+                          //           Spacer(),
+                          //           Text(rate)
+                          //
+                          //
+                          //         ],
+                          //       ),
+                          //
+                          //     ],
+                          //   ),
+                          // ),
 
-                                  ],
-                                ),
-
-                              ],
-                            ),
-                          ),
-
-                      //Text(snapshot.data!.contact![1].contactName.toString()),
+                          //Text(snapshot.data!.contact![1].contactName.toString()),
                           SizedBox(height: 10,),
 
 
@@ -434,7 +438,8 @@ class _Friends_ProfileState extends State<Friends_Profile> {
                                           child: Image.asset("assets/qualitiesimages/extrovert.png",height: 120,width: 120,)),
                                     ),
 
-                                    Text(extrovertvalue.toString()),
+                                    Text(snapshot.data!.contact!.trait![0].toString()),
+                                    //Text("2"),
                                     Text("Extrovert"),
                                   ],),
                                   Column(children: [
@@ -445,7 +450,7 @@ class _Friends_ProfileState extends State<Friends_Profile> {
                                           borderRadius:BorderRadius.circular(100),
                                           child: Image.asset("assets/qualitiesimages/friendly.png",height: 120,width: 120,)),
                                     ),
-                                    Text("1"),
+                                    Text(snapshot.data!.contact!.trait![1].toString()),
                                     Text("Friendly"),
                                   ],),
                                   Column(children: [
@@ -456,7 +461,7 @@ class _Friends_ProfileState extends State<Friends_Profile> {
                                           borderRadius:BorderRadius.circular(100),
                                           child: Image.asset("assets/qualitiesimages/intelligent.png",height: 120,width: 120,)),
                                     ),
-                                    Text("1"),
+                                    Text(snapshot.data!.contact!.trait![2].toString()),
                                     Text("Intelligent"),
                                   ],),
                                 ],
@@ -474,7 +479,7 @@ class _Friends_ProfileState extends State<Friends_Profile> {
                                           borderRadius:BorderRadius.circular(100),
                                           child: Image.asset("assets/qualitiesimages/handsome.png",height: 120,width: 120,)),
                                     ),
-                                    Text("1"),
+                                    Text(snapshot.data!.contact!.trait![3].toString()),
                                     Text("Good Looking"),
                                   ],),
                                   Column(children: [
@@ -485,7 +490,7 @@ class _Friends_ProfileState extends State<Friends_Profile> {
                                           borderRadius:BorderRadius.circular(100),
                                           child: Image.asset("assets/qualitiesimages/patience.png",height: 120,width: 120,)),
                                     ),
-                                    Text("1"),
+                                    Text(snapshot.data!.contact!.trait![4].toString()),
                                     Text("Patient"),
                                   ],),
                                   Column(children: [
@@ -497,13 +502,13 @@ class _Friends_ProfileState extends State<Friends_Profile> {
                                           borderRadius:BorderRadius.circular(100),
                                           child: Image.asset("assets/qualitiesimages/trust.png",height: 120,width: 120,)),
                                     ),
-                                    Text("1"),
+                                    Text(snapshot.data!.contact!.trait![5].toString()),
                                     Text("Trustworthy"),
                                   ],),
                                 ],
                               ),
 
-                              
+
                             ],),
 
 
@@ -511,11 +516,16 @@ class _Friends_ProfileState extends State<Friends_Profile> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Column(children: [
-                                Row(
-                                  children: [
-                                    Text(snapshot.data!.contact![0].rating??"0",style: TextStyle(fontSize: 18),),
-                                    Icon(Icons.star,color: Colors.orangeAccent,),
-                                  ],
+                                SizedBox(
+                                  //height:2,
+                                  width: 65,
+                                  child: Row(
+                                    children: [
+                                      Text(snapshot.data!.contact!.rating.toString(),style: TextStyle(fontSize: 18),),
+                                      // Text("2.22",style: TextStyle(fontSize: 18),),
+                                      Icon(Icons.star,color: Colors.orangeAccent,),
+                                    ],
+                                  ),
                                 ),
                                 Text("7 Rating",style: TextStyle(color: Colors.grey),),
                                 Text("3 review",style: TextStyle(color: Colors.grey),),
@@ -526,11 +536,11 @@ class _Friends_ProfileState extends State<Friends_Profile> {
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
                                     SizedBox(height: 8),
-                                    chartRow(context, '5', 89),
-                                    chartRow(context, '4', 40),
-                                    chartRow(context, '3', 30),
-                                    chartRow(context, '4', 20),
-                                    chartRow(context, '1', 10),
+                                    chartRow(context, '5', snapshot.data!.contact.ratingCount[4]),
+                                    chartRow(context, '4', snapshot.data!.contact.ratingCount[3]),
+                                    chartRow(context, '3', snapshot.data!.contact.ratingCount[2]),
+                                    chartRow(context, '2', snapshot.data!.contact.ratingCount[1]),
+                                    chartRow(context, '1', snapshot.data!.contact.ratingCount[0]),
                                     SizedBox(height: 8),
                                   ],
                                 ),
@@ -598,7 +608,7 @@ class _Friends_ProfileState extends State<Friends_Profile> {
                                     )
                                 ),
                                 onPressed: (){
-                                  Navigator.push(context, MaterialPageRoute(builder: (context)=>AddressDialog(mobile:widget.mobile)));
+                                  Navigator.push(context, MaterialPageRoute(builder: (context)=>AddressDialog(mobile:widget.mobile,namee: username.toString(),)));
 
                                 },
                                 child:  Text("Rate Now",style: TextStyle(color: Colors.black),)
@@ -679,13 +689,13 @@ class _Friends_ProfileState extends State<Friends_Profile> {
 
 
 
-  Future<Get_Info_Model?> getinfo() async {
+  Future<GetInfoModel?> getinfo() async {
 
     FormData formData = FormData.fromMap({
       'contact_no': widget.mobile,
     });
     // Create Dio instance
-    
+
     Dio dio = Dio();
 
     // Define the headers
@@ -706,7 +716,7 @@ class _Friends_ProfileState extends State<Friends_Profile> {
       if (response.statusCode == 200) {
         print(" get info..... ");
         print(response.data);
-        return Get_Info_Model.fromJson(response.data);
+        return GetInfoModel.fromJson(response.data);
 
         // API call successful
         print(response.data);
