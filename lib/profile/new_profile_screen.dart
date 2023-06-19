@@ -629,7 +629,11 @@ class _Profile_newState extends State<Profile_new> {
                           }
                           else{
                             return
-                              CircularProgressIndicator();
+                              Expanded(
+                                child: Container(
+                                    height:500,
+                                    child: Center(child: CircularProgressIndicator())),
+                              );
 
                           }
 

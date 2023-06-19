@@ -673,8 +673,11 @@ class _Friends_ProfileState extends State<Friends_Profile> {
                     }
                     else{
                       return
-                        Center(child: CircularProgressIndicator());
-
+                        Expanded(
+                          child: Container(
+                              height:500,
+                              child: Center(child: CircularProgressIndicator())),
+                        );
                     }
 
                   }
