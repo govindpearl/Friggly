@@ -37,16 +37,18 @@ class Contact {
   List<int> trait;
   String rating;
   int totalRatings;
-  List<int> ratingCount;
-  List<dynamic> reviews;
+  List<double> ratingPercents;
+  List<Review> reviews;
+  int reviewCount;
 
   Contact({
     required this.contactName,
     required this.trait,
     required this.rating,
     required this.totalRatings,
-    required this.ratingCount,
+    required this.ratingPercents,
     required this.reviews,
+    required this.reviewCount,
   });
 
   factory Contact.fromJson(Map<String, dynamic> json) => Contact(
@@ -54,8 +56,9 @@ class Contact {
     trait: List<int>.from(json["trait"].map((x) => x)),
     rating: json["rating"],
     totalRatings: json["total_ratings"],
-    ratingCount: List<int>.from(json["rating_count"].map((x) => x)),
-    reviews: List<dynamic>.from(json["reviews"].map((x) => x)),
+    ratingPercents: List<double>.from(json["rating_percents"].map((x) => x?.toDouble())),
+    reviews: List<Review>.from(json["reviews"].map((x) => Review.fromJson(x))),
+    reviewCount: json["review_count"],
   );
 
   Map<String, dynamic> toJson() => {
@@ -63,7 +66,36 @@ class Contact {
     "trait": List<dynamic>.from(trait.map((x) => x)),
     "rating": rating,
     "total_ratings": totalRatings,
-    "rating_count": List<dynamic>.from(ratingCount.map((x) => x)),
-    "reviews": List<dynamic>.from(reviews.map((x) => x)),
+    "rating_percents": List<dynamic>.from(ratingPercents.map((x) => x)),
+    "reviews": List<dynamic>.from(reviews.map((x) => x.toJson())),
+    "review_count": reviewCount,
+  };
+}
+
+class Review {
+  int userId;
+  String review;
+  String profilePhoto;
+  String name;
+
+  Review({
+    required this.userId,
+    required this.review,
+    required this.profilePhoto,
+    required this.name,
+  });
+
+  factory Review.fromJson(Map<String, dynamic> json) => Review(
+    userId: json["user_id"],
+    review: json["review"],
+    profilePhoto: json["profile_photo"],
+    name: json["name"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "user_id": userId,
+    "review": review,
+    "profile_photo": profilePhoto,
+    "name": name,
   };
 }

@@ -1,80 +1,157 @@
-class User_Profile_model {
-  String? msg;
-  String? status;
-  Profile? profile;
-  String? image;
+// To parse this JSON data, do
+//
+//     final userProfileModel = userProfileModelFromJson(jsonString);
 
-  User_Profile_model({this.msg, this.status, this.profile, this.image});
+import 'dart:convert';
 
-  User_Profile_model.fromJson(Map<String, dynamic> json) {
-    msg = json['msg'];
-    status = json['status'];
-    profile =
-    json['profile'] != null ? new Profile.fromJson(json['profile']) : null;
-    image = json['image'];
-  }
+UserProfileModel userProfileModelFromJson(String str) => UserProfileModel.fromJson(json.decode(str));
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['msg'] = this.msg;
-    data['status'] = this.status;
-    if (this.profile != null) {
-      data['profile'] = this.profile!.toJson();
-    }
-    data['image'] = this.image;
-    return data;
-  }
+String userProfileModelToJson(UserProfileModel data) => json.encode(data.toJson());
+
+class UserProfileModel {
+  String msg;
+  String status;
+  Profile profile;
+  String image;
+  OtherDetails otherDetails;
+
+  UserProfileModel({
+    required this.msg,
+    required this.status,
+    required this.profile,
+    required this.image,
+    required this.otherDetails,
+  });
+
+  factory UserProfileModel.fromJson(Map<String, dynamic> json) => UserProfileModel(
+    msg: json["msg"],
+    status: json["status"],
+    profile: Profile.fromJson(json["profile"]),
+    image: json["image"],
+    otherDetails: OtherDetails.fromJson(json["other_details"]),
+  );
+
+  Map<String, dynamic> toJson() => {
+    "msg": msg,
+    "status": status,
+    "profile": profile.toJson(),
+    "image": image,
+    "other_details": otherDetails.toJson(),
+  };
+}
+
+class OtherDetails {
+  List<int> trait;
+  String avgRating;
+  List<int> ratingPercents;
+  int reviewCount;
+  List<Review> reviews;
+  int totalRatings;
+
+  OtherDetails({
+    required this.trait,
+    required this.avgRating,
+    required this.ratingPercents,
+    required this.reviewCount,
+    required this.reviews,
+    required this.totalRatings,
+  });
+
+  factory OtherDetails.fromJson(Map<String, dynamic> json) => OtherDetails(
+    trait: List<int>.from(json["trait"].map((x) => x)),
+    avgRating: json["avg_rating"],
+    ratingPercents: List<int>.from(json["rating_percents"].map((x) => x)),
+    reviewCount: json["review_count"],
+    reviews: List<Review>.from(json["reviews"].map((x) => Review.fromJson(x))),
+    totalRatings: json["total_ratings"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "trait": List<dynamic>.from(trait.map((x) => x)),
+    "avg_rating": avgRating,
+    "rating_percents": List<dynamic>.from(ratingPercents.map((x) => x)),
+    "review_count": reviewCount,
+    "reviews": List<dynamic>.from(reviews.map((x) => x.toJson())),
+    "total_ratings": totalRatings,
+  };
+}
+
+class Review {
+  int userId;
+  String review;
+  String profilePhoto;
+  String name;
+
+  Review({
+    required this.userId,
+    required this.review,
+    required this.profilePhoto,
+    required this.name,
+  });
+
+  factory Review.fromJson(Map<String, dynamic> json) => Review(
+    userId: json["user_id"],
+    review: json["review"],
+    profilePhoto: json["profile_photo"],
+    name: json["name"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "user_id": userId,
+    "review": review,
+    "profile_photo": profilePhoto,
+    "name": name,
+  };
 }
 
 class Profile {
-  int? id;
-  String? name;
-  String? mobileNo;
-  String? email;
-  String? gender;
-  String? doB;
-  String? photo;
-  String? apiToken;
-  String? createdAt;
-  String? updatedAt;
+  int id;
+  String name;
+  String mobileNo;
+  String email;
+  String gender;
+  DateTime doB;
+  String photo;
+  String apiToken;
+  DateTime createdAt;
+  DateTime updatedAt;
 
-  Profile(
-      {this.id,
-        this.name,
-        this.mobileNo,
-        this.email,
-        this.gender,
-        this.doB,
-        this.photo,
-        this.apiToken,
-        this.createdAt,
-        this.updatedAt});
+  Profile({
+    required this.id,
+    required this.name,
+    required this.mobileNo,
+    required this.email,
+    required this.gender,
+    required this.doB,
+    required this.photo,
+    required this.apiToken,
+    required this.createdAt,
+    required this.updatedAt,
+  });
 
-  Profile.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    name = json['name'];
-    mobileNo = json['mobileNo'];
-    email = json['email'];
-    gender = json['gender'];
-    doB = json['DoB'];
-    photo = json['photo'];
-    apiToken = json['api_token'];
-    createdAt = json['created_at'];
-    updatedAt = json['updated_at'];
-  }
+  factory Profile.fromJson(Map<String, dynamic> json) => Profile(
+    id: json["id"],
+    name: json["name"],
+    mobileNo: json["mobileNo"],
+    email: json["email"],
+    gender: json["gender"],
+    doB: DateTime.parse(json["DoB"]),
+    photo: json["photo"],
+    apiToken: json["api_token"],
+    createdAt: DateTime.parse(json["created_at"]),
+    updatedAt: DateTime.parse(json["updated_at"]),
+  );
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['name'] = this.name;
-    data['mobileNo'] = this.mobileNo;
-    data['email'] = this.email;
-    data['gender'] = this.gender;
-    data['DoB'] = this.doB;
-    data['photo'] = this.photo;
-    data['api_token'] = this.apiToken;
-    data['created_at'] = this.createdAt;
-    data['updated_at'] = this.updatedAt;
-    return data;
-  }
+  Map<String, dynamic> toJson() => {
+    "id": id,
+    "name": name,
+    "mobileNo": mobileNo,
+    "email": email,
+    "gender": gender,
+    "DoB": "${doB.year.toString().padLeft(4, '0')}-${doB.month.toString().padLeft(2, '0')}-${doB.day.toString().padLeft(2, '0')}",
+    "photo": photo,
+    "api_token": apiToken,
+    "created_at": createdAt.toIso8601String(),
+    "updated_at": updatedAt.toIso8601String(),
+  };
 }

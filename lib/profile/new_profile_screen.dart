@@ -199,7 +199,7 @@ class _Profile_newState extends State<Profile_new> {
                   child: Padding(
                     padding:  EdgeInsets.only(left: 16,right: 16,top: 10,),
                     child:
-                    FutureBuilder<User_Profile_model?>(
+                    FutureBuilder<UserProfileModel?>(
                         future:  getprofiledata(),
                         builder: (context, snapshot) {
 
@@ -261,8 +261,10 @@ class _Profile_newState extends State<Profile_new> {
                                   //height: 100,
                                   width: double.infinity,
                                   decoration: BoxDecoration(
-                                      color: Color(0xffFFF2F2),
+                                      color: Color(0xffebfabe),
+                                      border: Border.all(color:Colors.green),
                                       borderRadius: BorderRadius.circular(10)
+
                                   ),
                                   child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -304,45 +306,48 @@ class _Profile_newState extends State<Profile_new> {
 
                                 SizedBox(height: 20,),
 
-                                // Rating
+                                //Rating
 
-                                // Container(
-                                //   color: Colors.white,
-                                //   // height: 60,
-                                //   child: Column(
-                                //     crossAxisAlignment: CrossAxisAlignment.start,
-                                //     children: [
-                                //       Row(
-                                //         children: [
-                                //           Text("Rating",style:TextStyle(fontSize: 20,fontWeight: FontWeight.w500),),
-                                //           RatingBar.builder(
-                                //             initialRating: 0,
-                                //             minRating: 1,
-                                //             direction: Axis.horizontal,
-                                //             allowHalfRating: true,
-                                //             itemCount: 5,
-                                //             itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
-                                //             itemBuilder: (context, _) => Icon(
-                                //               Icons.star,
-                                //               color: Colors.amber,
-                                //             ),
-                                //             onRatingUpdate: (rating) {
-                                //               print(rating);
-                                //               setState(() {
-                                //                 rate=rating.toString();
-                                //               });
-                                //             },
-                                //           ),
-                                //           Spacer(),
-                                //           Text(rate)
-                                //
-                                //
-                                //         ],
-                                //       ),
-                                //
-                                //     ],
-                                //   ),
-                                // ),
+                                Container(
+                                  color: Colors.white,
+                                  // height: 60,
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Text("Rating",style:TextStyle(fontSize: 20,fontWeight: FontWeight.w500),),
+                                          IgnorePointer(
+                                            ignoring: true, // Disables user interaction
+                                            child: RatingBar.builder(
+                                              initialRating: double.tryParse(snapshot.data!.otherDetails.avgRating!.toString()) ?? 0.0,
+                                             // initialRating: 2,
+                                              minRating: 1,
+                                              direction: Axis.horizontal,
+                                              allowHalfRating: true,
+                                              itemCount: 5,
+                                              itemSize: 20.0,
+                                              unratedColor: Colors.grey[300],
+                                              itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
+                                              itemBuilder: (context, _) => Icon(
+                                                Icons.star,
+                                                color: Colors.amber,
+                                              ),
+                                              onRatingUpdate: (double rating) {
+                                                // Handle the updated rating if needed
+                                              },
+                                            ),
+                                          ),
+                                          Spacer(),
+                                          Text(snapshot.data!.otherDetails.avgRating!.toString()),
+
+
+                                        ],
+                                      ),
+
+                                    ],
+                                  ),
+                                ),
 
 
                                 SizedBox(height: 20,),
@@ -366,8 +371,8 @@ class _Profile_newState extends State<Profile_new> {
                                                 child: Image.asset("assets/qualitiesimages/extrovert.png",height: 120,width: 120,)),
                                           ),
 
-                                          //Text(snapshot.data!.contact!.trait![0].toString()),
-                                          Text("2"),
+                                          Text(snapshot.data!.otherDetails!.trait![0].toString()),
+                                         // Text("2"),
                                           Text("Extrovert"),
                                         ],),
                                         Column(children: [
@@ -378,8 +383,9 @@ class _Profile_newState extends State<Profile_new> {
                                                 borderRadius:BorderRadius.circular(100),
                                                 child: Image.asset("assets/qualitiesimages/friendly.png",height: 120,width: 120,)),
                                           ),
-                                         // Text(snapshot.data!.contact!.trait![1].toString()),
-                                          Text("2"),
+                                          Text(snapshot.data!.otherDetails!.trait![1].toString()),
+
+                                          //Text("2"),
                                           Text("Friendly"),
                                         ],),
                                         Column(children: [
@@ -390,8 +396,9 @@ class _Profile_newState extends State<Profile_new> {
                                                 borderRadius:BorderRadius.circular(100),
                                                 child: Image.asset("assets/qualitiesimages/intelligent.png",height: 120,width: 120,)),
                                           ),
-                                          //Text(snapshot.data!.contact!.trait![2].toString()),
-                                          Text("2"),
+                                          Text(snapshot.data!.otherDetails!.trait![2].toString()),
+
+                                          //Text("2"),
                                           Text("Intelligent"),
                                         ],),
                                       ],
@@ -409,8 +416,9 @@ class _Profile_newState extends State<Profile_new> {
                                                 borderRadius:BorderRadius.circular(100),
                                                 child: Image.asset("assets/qualitiesimages/handsome.png",height: 120,width: 120,)),
                                           ),
-                                          //Text(snapshot.data!.contact!.trait![3].toString()),
-                                          Text("2"),
+                                          Text(snapshot.data!.otherDetails!.trait![3].toString()),
+
+                                          //Text("2"),
                                           Text("Good Looking"),
                                         ],),
                                         Column(children: [
@@ -421,8 +429,9 @@ class _Profile_newState extends State<Profile_new> {
                                                 borderRadius:BorderRadius.circular(100),
                                                 child: Image.asset("assets/qualitiesimages/patience.png",height: 120,width: 120,)),
                                           ),
-                                          //Text(snapshot.data!.contact!.trait![4].toString()),
-                                          Text("2"),
+                                          Text(snapshot.data!.otherDetails!.trait![4].toString()),
+
+                                          //Text("2"),
                                           Text("Patient"),
                                         ],),
                                         Column(children: [
@@ -434,8 +443,8 @@ class _Profile_newState extends State<Profile_new> {
                                                 borderRadius:BorderRadius.circular(100),
                                                 child: Image.asset("assets/qualitiesimages/trust.png",height: 120,width: 120,)),
                                           ),
-                                         // Text(snapshot.data!.contact!.trait![5].toString()),
-                                          Text("2"),
+                                          Text(snapshot.data!.otherDetails!.trait![5].toString()),
+                                          //Text("2"),
                                           Text("Trustworthy"),
                                         ],),
                                       ],
@@ -454,12 +463,14 @@ class _Profile_newState extends State<Profile_new> {
                                     Column(children: [
                                       Row(
                                         children: [
-                                          Text("3.5",style: TextStyle(fontSize: 18),),
+                                          Text(snapshot.data!.otherDetails.avgRating!.toString(),style: TextStyle(fontSize: 18),),
+                                          //Text("3.5",style: TextStyle(fontSize: 18),),
                                           Icon(Icons.star,color: Colors.orangeAccent,),
                                         ],
                                       ),
-                                      Text("7 Rating",style: TextStyle(color: Colors.grey),),
-                                      Text("3 review",style: TextStyle(color: Colors.grey),),
+                                      Text("${snapshot.data!.otherDetails.totalRatings.toString()} Rating",style: TextStyle(color: Colors.grey),),
+                                      //Text("7 Rating",style: TextStyle(color: Colors.grey),),
+                                      Text("${snapshot.data!.otherDetails.reviewCount.toString()} review",style: TextStyle(color: Colors.grey),),
                                     ],),
 
                                     Container(
@@ -467,11 +478,11 @@ class _Profile_newState extends State<Profile_new> {
                                         crossAxisAlignment: CrossAxisAlignment.center,
                                         children: [
                                           SizedBox(height: 8),
-                                          chartRow(context, '5', 89),
-                                          chartRow(context, '4', 40),
-                                          chartRow(context, '3', 30),
-                                          chartRow(context, '4', 20),
-                                          chartRow(context, '1', 10),
+                                          chartRow(context, '5', snapshot.data!.otherDetails.ratingPercents[4]),
+                                          chartRow(context, '4', snapshot.data!.otherDetails.ratingPercents[3]),
+                                          chartRow(context, '3', snapshot.data!.otherDetails.ratingPercents[2]),
+                                          chartRow(context, '4', snapshot.data!.otherDetails.ratingPercents[1]),
+                                          chartRow(context, '1', snapshot.data!.otherDetails.ratingPercents[0]),
                                           SizedBox(height: 8),
                                         ],
                                       ),
@@ -479,7 +490,7 @@ class _Profile_newState extends State<Profile_new> {
                                   ],
                                 ),
 
-                                Container(
+                              /*  Container(
                                   decoration: BoxDecoration(
                                       color:Color(0xffFFE6E6),
 
@@ -517,8 +528,96 @@ class _Profile_newState extends State<Profile_new> {
                                       ),
                                     ],
                                   ),
-                                ),
+                                ),*/
 
+                                Column(
+                                  children: [
+                                    Text("Reviews",style: TextStyle(fontWeight: FontWeight.w500,fontSize: 20),),
+                                    ListView.separated(
+                                      separatorBuilder: (BuildContext context, int index) => const Divider(),
+
+                                      shrinkWrap: true,
+                                      physics:  NeverScrollableScrollPhysics(),
+                                      itemBuilder: (context , int index){
+                                        return
+                                          Container(
+                                            decoration: BoxDecoration(
+                                                color:Color(0xffebfabe),
+                                                border: Border.all(color:Colors.green),
+                                                borderRadius: BorderRadius.circular(12)
+                                            ),
+                                            width: double.infinity,
+                                            //height: isExpanded ? null : 300,
+                                            padding: EdgeInsets.all(10.0),
+                                            child: Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+
+                                                Row(children: [
+                                                  CircleAvatar(
+                                                    radius: 20.0, // Adjust the radius as needed
+                                                    backgroundImage: NetworkImage(snapshot.data!.otherDetails.reviews[index].profilePhoto.toString()),
+                                                  ),
+                                                  SizedBox(width: 10,),
+                                                  Text(snapshot.data!.otherDetails.reviews[0].name??" ",style: TextStyle(fontWeight: FontWeight.w400,fontSize: 18),),
+
+                                                ],),
+
+                                                SizedBox(height: 10,),
+
+                                                /*   IgnorePointer(
+                                          ignoring: true, // Disables user interaction
+                                          child: RatingBar.builder(
+                                            initialRating: double.tryParse(snapshot.data!.contact!.rating.toString()) ?? 0.0,
+                                            minRating: 1,
+                                            direction: Axis.horizontal,
+                                            allowHalfRating: true,
+                                            itemCount: 5,
+                                            itemSize: 20.0,
+                                            unratedColor: Colors.grey[300],
+                                            itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
+                                            itemBuilder: (context, _) => Icon(
+                                              Icons.star,
+                                              color: Colors.amber,
+                                            ),
+                                            onRatingUpdate: (double rating) {
+                                              // Handle the updated rating if needed
+                                            },
+                                          ),
+                                        ),*/
+
+                                                Text(
+                                                  snapshot.data!.otherDetails.reviews[index].review.toString(),
+                                                  //'Truecaller reviews seem mostly positive. As of September 2022, the app has a 4.5-star ',
+                                                  style: TextStyle(fontSize: 16.0),
+                                                ),
+                                                SizedBox(height: 16.0),
+                                                // if (isExpanded)
+                                                //   Text(
+                                                //     'rating from 251.8K reviews on the App Store. On Google Play, it maintains its 4.5-star rating average with 18.1M reviews',
+                                                //     style: TextStyle(fontSize: 16.0),
+                                                //   ),
+                                                // SizedBox(height: 16.0),
+                                                // TextButton(
+                                                //   onPressed: () {
+                                                //     setState(() {
+                                                //       isExpanded = !isExpanded;
+                                                //     });
+                                                //   },
+                                                //   child: Text(
+                                                //     isExpanded ? 'View less' : 'View more',
+                                                //     style: TextStyle(color: Colors.blue),
+                                                //   ),
+                                                //),
+                                              ],
+                                            ),
+                                          );
+
+                                      },
+                                      itemCount:snapshot.data!.otherDetails.reviews.length,
+                                    ),
+                                  ],
+                                ),
 
 
 //sign up button
@@ -590,7 +689,7 @@ class _Profile_newState extends State<Profile_new> {
     );
   }
 
-  Future<User_Profile_model?> getprofiledata() async {
+  Future<UserProfileModel?> getprofiledata() async {
     // Create Dio instance
     Dio dio = Dio();
 
@@ -609,7 +708,7 @@ class _Profile_newState extends State<Profile_new> {
 
       // Handle the response
       if (response.statusCode == 200) {
-       return User_Profile_model.fromJson(response.data);
+       return UserProfileModel.fromJson(response.data);
 
         // API call successful
         print(response.data);

@@ -377,44 +377,47 @@ class _Friends_ProfileState extends State<Friends_Profile> {
                           SizedBox(height: 10,),
 
                           // rating bar
+                          Container(
+                            color: Colors.white,
+                            // height: 60,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    Text("Rating",style:TextStyle(fontSize: 20,fontWeight: FontWeight.w500),),
+                                    IgnorePointer(
+                                      ignoring: true, // Disables user interaction
+                                      child: RatingBar.builder(
+                                        initialRating: double.tryParse(snapshot.data!.contact!.rating.toString()) ?? 0.0,
+                                        minRating: 1,
+                                        direction: Axis.horizontal,
+                                        allowHalfRating: true,
+                                        itemCount: 5,
+                                        itemSize: 20.0,
+                                        unratedColor: Colors.grey[300],
+                                        itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
+                                        itemBuilder: (context, _) => Icon(
+                                          Icons.star,
+                                          color: Colors.amber,
+                                        ),
+                                        onRatingUpdate: (double rating) {
+                                          // Handle the updated rating if needed
+                                        },
+                                      ),
+                                    ),
 
-                          // Container(
-                          //   color: Colors.white,
-                          //   // height: 60,
-                          //   child: Column(
-                          //     crossAxisAlignment: CrossAxisAlignment.start,
-                          //     children: [
-                          //       Row(
-                          //         children: [
-                          //           Text("Rating",style:TextStyle(fontSize: 20,fontWeight: FontWeight.w500),),
-                          //           RatingBar.builder(
-                          //             initialRating: 0,
-                          //             minRating: 1,
-                          //             direction: Axis.horizontal,
-                          //             allowHalfRating: true,
-                          //             itemCount: 5,
-                          //             itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
-                          //             itemBuilder: (context, _) => Icon(
-                          //               Icons.star,
-                          //               color: Colors.amber,
-                          //             ),
-                          //             onRatingUpdate: (rating) {
-                          //               print(rating);
-                          //               setState(() {
-                          //                 rate=rating.toString();
-                          //               });
-                          //             },
-                          //           ),
-                          //           Spacer(),
-                          //           Text(rate)
-                          //
-                          //
-                          //         ],
-                          //       ),
-                          //
-                          //     ],
-                          //   ),
-                          // ),
+                                    Spacer(),
+                                    Text(snapshot.data!.contact!.rating.toString()),
+
+
+                                  ],
+                                ),
+
+                              ],
+                            ),
+                          ),
+
 
                           //Text(snapshot.data!.contact![1].contactName.toString()),
                           SizedBox(height: 10,),
@@ -527,8 +530,8 @@ class _Friends_ProfileState extends State<Friends_Profile> {
                                     ],
                                   ),
                                 ),
-                                Text("7 Rating",style: TextStyle(color: Colors.grey),),
-                                Text("3 review",style: TextStyle(color: Colors.grey),),
+                                Text("${snapshot.data!.contact.totalRatings.toString()} Rating",style: TextStyle(color: Colors.grey),),
+                                Text("${snapshot.data!.contact.reviewCount.toString()} review",style: TextStyle(color: Colors.grey),),
                               ],),
 
                               Container(
@@ -536,11 +539,11 @@ class _Friends_ProfileState extends State<Friends_Profile> {
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
                                     SizedBox(height: 8),
-                                    chartRow(context, '5', snapshot.data!.contact.ratingCount[4]),
-                                    chartRow(context, '4', snapshot.data!.contact.ratingCount[3]),
-                                    chartRow(context, '3', snapshot.data!.contact.ratingCount[2]),
-                                    chartRow(context, '2', snapshot.data!.contact.ratingCount[1]),
-                                    chartRow(context, '1', snapshot.data!.contact.ratingCount[0]),
+                                    chartRow(context, '5', snapshot.data!.contact.ratingPercents[4].toInt()),
+                                    chartRow(context, '4', snapshot.data!.contact.ratingPercents[3].toInt()),
+                                    chartRow(context, '3', snapshot.data!.contact.ratingPercents[2].toInt()),
+                                    chartRow(context, '2', snapshot.data!.contact.ratingPercents[1].toInt()),
+                                    chartRow(context, '1', snapshot.data!.contact.ratingPercents[0].toInt()),
                                     SizedBox(height: 8),
                                   ],
                                 ),
@@ -548,45 +551,92 @@ class _Friends_ProfileState extends State<Friends_Profile> {
                             ],
                           ),
 
-                          Container(
-                            decoration: BoxDecoration(
-                                color:Color(0xffFFE6E6),
 
-                                borderRadius: BorderRadius.circular(12)
-                            ),
-                            width: double.infinity,
-                            //height: isExpanded ? null : 300,
-                            padding: EdgeInsets.all(10.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text("Reviews",style: TextStyle(fontWeight: FontWeight.w500,fontSize: 20),),
-                                SizedBox(height: 10,),
-                                Text(
-                                  'Truecaller reviews seem mostly positive. As of September 2022, the app has a 4.5-star ',
-                                  style: TextStyle(fontSize: 16.0),
+
+                              ListView.separated(
+                          separatorBuilder: (BuildContext context, int index) => const Divider(),
+
+                          shrinkWrap: true,
+                          physics:  NeverScrollableScrollPhysics(),
+                          itemBuilder: (context , int index){
+                            return
+                              Container(
+                                decoration: BoxDecoration(
+                                    color:Color(0xffe4f2b8),
+                                     border: Border.all(color: Colors.green),
+                                    borderRadius: BorderRadius.circular(12)
                                 ),
-                                SizedBox(height: 16.0),
-                                if (isExpanded)
-                                  Text(
-                                    'rating from 251.8K reviews on the App Store. On Google Play, it maintains its 4.5-star rating average with 18.1M reviews',
-                                    style: TextStyle(fontSize: 16.0),
-                                  ),
-                                SizedBox(height: 16.0),
-                                TextButton(
-                                  onPressed: () {
-                                    setState(() {
-                                      isExpanded = !isExpanded;
-                                    });
-                                  },
-                                  child: Text(
-                                    isExpanded ? 'View less' : 'View more',
-                                    style: TextStyle(color: Colors.blue),
-                                  ),
+                                width: double.infinity,
+                                //height: isExpanded ? null : 300,
+                                padding: EdgeInsets.all(10.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+
+                                    Row(children: [
+                                      CircleAvatar(
+                                        radius: 20.0, // Adjust the radius as needed
+                                        backgroundImage: NetworkImage(snapshot.data!.contact.reviews[index].profilePhoto.toString()),
+                                      ),
+                                      SizedBox(width: 10,),
+                                      Text(snapshot.data!.contact.reviews[0].name??" ",style: TextStyle(fontWeight: FontWeight.w500,fontSize: 20),),
+
+                                    ],),
+
+                                    SizedBox(height: 10,),
+
+                                 /*   IgnorePointer(
+                                      ignoring: true, // Disables user interaction
+                                      child: RatingBar.builder(
+                                        initialRating: double.tryParse(snapshot.data!.contact!.rating.toString()) ?? 0.0,
+                                        minRating: 1,
+                                        direction: Axis.horizontal,
+                                        allowHalfRating: true,
+                                        itemCount: 5,
+                                        itemSize: 20.0,
+                                        unratedColor: Colors.grey[300],
+                                        itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
+                                        itemBuilder: (context, _) => Icon(
+                                          Icons.star,
+                                          color: Colors.amber,
+                                        ),
+                                        onRatingUpdate: (double rating) {
+                                          // Handle the updated rating if needed
+                                        },
+                                      ),
+                                    ),*/
+
+                                    Text(
+                                      snapshot.data!.contact.reviews[index].review??" ",
+                                      //'Truecaller reviews seem mostly positive. As of September 2022, the app has a 4.5-star ',
+                                      style: TextStyle(fontSize: 16.0),
+                                    ),
+                                    SizedBox(height: 16.0),
+                                    // if (isExpanded)
+                                    //   Text(
+                                    //     'rating from 251.8K reviews on the App Store. On Google Play, it maintains its 4.5-star rating average with 18.1M reviews',
+                                    //     style: TextStyle(fontSize: 16.0),
+                                    //   ),
+                                    // SizedBox(height: 16.0),
+                                    // TextButton(
+                                    //   onPressed: () {
+                                    //     setState(() {
+                                    //       isExpanded = !isExpanded;
+                                    //     });
+                                    //   },
+                                    //   child: Text(
+                                    //     isExpanded ? 'View less' : 'View more',
+                                    //     style: TextStyle(color: Colors.blue),
+                                    //   ),
+                                    //),
+                                  ],
                                 ),
-                              ],
-                            ),
-                          ),
+                              );
+
+                          },
+                          itemCount:snapshot.data!.contact.reviews.length,
+                        ),
+
 
 
 
@@ -623,7 +673,7 @@ class _Friends_ProfileState extends State<Friends_Profile> {
                     }
                     else{
                       return
-                        CircularProgressIndicator();
+                        Center(child: CircularProgressIndicator());
 
                     }
 
