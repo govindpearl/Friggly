@@ -3,9 +3,12 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import '../API_COLLECTION.dart';
+import '../Controller_Classes/Getprofilecontroller.dart';
 import '../ModelClass/user_profile_model.dart';
 import '../Settingscreen.dart';
 import '../app_preferences.dart';
@@ -13,13 +16,18 @@ import '../app_preferences.dart';
 
 
 class Profile_new extends StatefulWidget {
-  const Profile_new({Key? key}) : super(key: key);
+
+
+   Profile_new({Key? key}) : super(key: key);
 
   @override
   State<Profile_new> createState() => _Profile_newState();
 }
 
 class _Profile_newState extends State<Profile_new> {
+
+  Userprofiledetails userprofiledetails = Get.put(Userprofiledetails());
+
 
   bool isExpanded = false;
   late String countryValue;
@@ -150,10 +158,6 @@ class _Profile_newState extends State<Profile_new> {
 
 
 
-
-
-
-
   final textFieldFocusNode = FocusNode();
   final textFieldFocus = FocusNode();
   bool _obscured = true;
@@ -183,145 +187,386 @@ class _Profile_newState extends State<Profile_new> {
     return SafeArea(
       child: Scaffold(
           body:
-          Column(
-            children: [
-              Align(
-                alignment: Alignment.topRight,
-                child:
-                InkWell(
-                    onTap: (){
-                      Navigator.push(context, MaterialPageRoute(builder: (context)=>Settingscreen()));
-                    },
-                    child: Icon(Icons.settings,size: 30,)),
-              ),
-              Expanded(
-                child: SingleChildScrollView(
-                  child: Padding(
-                    padding:  EdgeInsets.only(left: 16,right: 16,top: 10,),
-                    child:
-                    FutureBuilder<UserProfileModel?>(
-                        future:  getprofiledata(),
-                        builder: (context, snapshot) {
+          Obx(()=>userprofiledetails.isLoading.value?Center(child: CircularProgressIndicator(),):
+             Column(
+              children: [
+                Align(
+                  alignment: Alignment.topRight,
+                  child:
+                  InkWell(
+                      onTap: (){
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=>Settingscreen()));
+                      },
+                      child: Icon(Icons.settings,size: 30,)),
+                ),
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: Padding(
+                      padding:  EdgeInsets.only(left: 16,right: 16,top: 10,),
+                      child:
+                      Column(
+                        children: [
 
-                          if (snapshot.hasData) {
 
-                            return
+                          SizedBox(height: 10,),
 
-                              Column(
+                          Stack(children: [
+                            CircleAvatar(
+                              backgroundColor: Colors.green,
+                              radius: 70,
+                              // borderRadius: BorderRadius.circular(100),
+                              child: InkWell(
+                                //onTap: imagePickerOption,
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(100),
+                                  child:
+                                  pickedImage != null
+                                      ? Image.file(
+                                    pickedImage!,
+                                    width: 135,
+                                    height: 135,
+                                    fit: BoxFit.cover,
+                                  )
+                                      : ClipRRect(
+                                      borderRadius: BorderRadius.circular(100),
+                                      //onTap: imagePickerOption,
+                                      child: Image.network(userprofiledetails.userProfileModel!.image.toString(),height: 135,width: 135,fit: BoxFit.fill,)
+
+                                  ),
+                                ),
+                              ),
+                            ),
+
+                            Positioned(
+                              bottom: 20,
+                              right: 0,
+                              child: InkWell(
+                                onTap: imagePickerOption,
+                                child: Icon(Icons.camera_alt,color: Colors.black,size: 30,),
+                              ),
+                            ),
+
+                          ],),
+
+                          SizedBox(height: 15,),
+                          //Text(snapshot.data!.profile!.name.toString(),style: TextStyle(fontWeight: FontWeight.w700,fontSize: 24),),
+                           Text(userprofiledetails.userProfileModel!.profile.name.toString(),style: TextStyle(fontWeight: FontWeight.w700,fontSize: 24),),
+                          //  Text(snapshot.data!.profile!.name.toString(),style: TextStyle(fontWeight: FontWeight.w700,fontSize: 24),),
+                          //Text(snapshot.data!.profile!.name.toString(),style: TextStyle(fontWeight: FontWeight.w700,fontSize: 24),),
+
+                          Container(
+                            padding: EdgeInsets.all(16),
+                            //height: 100,
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                                color: Color(0xffebfabe),
+                                border: Border.all(color:Colors.green),
+                                borderRadius: BorderRadius.circular(10)
+
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.start,
                               children: [
 
-
-                                SizedBox(height: 10,),
-
-                                Stack(children: [
-                                  CircleAvatar(
-                                    backgroundColor: Colors.green,
-                                    radius: 70,
-                                    // borderRadius: BorderRadius.circular(100),
-                                    child: InkWell(
-                                      //onTap: imagePickerOption,
-                                      child: ClipRRect(
-                                        borderRadius: BorderRadius.circular(100),
-                                        child:
-                                        pickedImage != null
-                                            ? Image.file(
-                                          pickedImage!,
-                                          width: 135,
-                                          height: 135,
-                                          fit: BoxFit.cover,
-                                        )
-                                            : ClipRRect(
-                                            borderRadius: BorderRadius.circular(100),
-                                            //onTap: imagePickerOption,
-                                            child: Image.network(snapshot.data!.image.toString(),height: 135,width: 135,fit: BoxFit.fill,)
-
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-
-                                  Positioned(
-                                    bottom: 20,
-                                    right: 0,
-                                    child: InkWell(
-                                      onTap: imagePickerOption,
-                                      child: Icon(Icons.camera_alt,color: Colors.black,size: 30,),
-                                    ),
-                                  ),
-
-                                ],),
-
-                                SizedBox(height: 15,),
-                                Text(snapshot.data!.profile!.name.toString(),style: TextStyle(fontWeight: FontWeight.w700,fontSize: 24),),
-                              //  Text(snapshot.data!.profile!.name.toString(),style: TextStyle(fontWeight: FontWeight.w700,fontSize: 24),),
-                                //Text(snapshot.data!.profile!.name.toString(),style: TextStyle(fontWeight: FontWeight.w700,fontSize: 24),),
-
-                                Container(
-                                  padding: EdgeInsets.all(16),
-                                  //height: 100,
-                                  width: double.infinity,
-                                  decoration: BoxDecoration(
-                                      color: Color(0xffebfabe),
-                                      border: Border.all(color:Colors.green),
-                                      borderRadius: BorderRadius.circular(10)
-
-                                  ),
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-
-                                      Row(
-                                        children: [
-                                          Icon(Icons.phone,color: Color(0xff03B96E),),
-                                          SizedBox(width: 10,),
-                                          Text(snapshot.data!.profile!.mobileNo.toString()),
-                                        ],
-                                      ),
-                                      Row(
-                                        children: [
-                                          Icon(Icons.email,color: Color(0xff03B96E),),
-                                          SizedBox(width: 10,),
-                                          Text(snapshot.data!.profile!.email.toString()),
-                                        ],
-                                      ),
-                                      Row(
-                                        children: [
-                                          Icon(Icons.male_sharp,color: Color(0xff03B96E),),
-                                          SizedBox(width: 10,),
-                                          Text(snapshot.data!.profile!.gender.toString()),
-                                        ],
-                                      ),
-                                      Row(
-                                        children: [
-                                          Icon(Icons.date_range,color: Color(0xff03B96E),),
-                                          SizedBox(width: 10,),
-                                          Text(snapshot.data!.profile!.doB.toString()),
-                                        ],
-                                      ),
-
-                                    ],),
-
+                                Row(
+                                  children: [
+                                    Icon(Icons.phone,color: Color(0xff03B96E),),
+                                    SizedBox(width: 10,),
+                                    Text(userprofiledetails.userProfileModel!.profile!.mobileNo.toString()),
+                                  ],
+                                ),
+                                Row(
+                                  children: [
+                                    Icon(Icons.email,color: Color(0xff03B96E),),
+                                    SizedBox(width: 10,),
+                                    Text(userprofiledetails.userProfileModel!.profile!.email.toString()),
+                                  ],
+                                ),
+                                Row(
+                                  children: [
+                                    Icon(Icons.male_sharp,color: Color(0xff03B96E),),
+                                    SizedBox(width: 10,),
+                                    Text(userprofiledetails.userProfileModel!.profile!.gender.toString()),
+                                  ],
+                                ),
+                                Row(
+                                  children: [
+                                    Icon(Icons.date_range,color: Color(0xff03B96E),),
+                                    SizedBox(width: 10,),
+                                    Text(userprofiledetails.userProfileModel!.profile!.doB.toString()),
+                                  ],
                                 ),
 
-                                SizedBox(height: 20,),
+                              ],),
 
-                                //Rating
+                          ),
 
-                                Container(
-                                  color: Colors.white,
-                                  // height: 60,
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Row(
+                          SizedBox(height: 20,),
+
+                          //Rating
+
+                          Container(
+                            color: Colors.white,
+                            // height: 60,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    Text("Rating",style:TextStyle(fontSize: 20,fontWeight: FontWeight.w500),),
+                                    IgnorePointer(
+                                      ignoring: true, // Disables user interaction
+                                      child: RatingBar.builder(
+                                        initialRating: double.tryParse(userprofiledetails.userProfileModel!.otherDetails.avgRating!.toString()) ?? 0.0,
+                                        // initialRating: 2,
+                                        minRating: 1,
+                                        direction: Axis.horizontal,
+                                        allowHalfRating: true,
+                                        itemCount: 5,
+                                        itemSize: 20.0,
+                                        unratedColor: Colors.grey[300],
+                                        itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
+                                        itemBuilder: (context, _) => Icon(
+                                          Icons.star,
+                                          color: Colors.amber,
+                                        ),
+                                        onRatingUpdate: (double rating) {
+                                          // Handle the updated rating if needed
+                                        },
+                                      ),
+                                    ),
+                                    Spacer(),
+                                    Text(userprofiledetails.userProfileModel!.otherDetails.avgRating!.toString()),
+
+
+                                  ],
+                                ),
+
+                              ],
+                            ),
+                          ),
+
+
+                          SizedBox(height: 20,),
+
+
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+
+                                  Column(children: [
+                                    CircleAvatar(
+                                      backgroundColor: Colors.grey,
+                                      radius: 30,
+                                      child: ClipRRect(
+                                          borderRadius:BorderRadius.circular(100),
+                                          child: Image.asset("assets/qualitiesimages/extrovert.png",height: 120,width: 120,)),
+                                    ),
+
+                                    Text(userprofiledetails.userProfileModel!.otherDetails!.trait![0].toString()),
+                                    // Text("2"),
+                                    Text("Extrovert"),
+                                  ],),
+                                  Column(children: [
+                                    CircleAvatar(
+                                      backgroundColor: Colors.grey,
+                                      radius: 30,
+                                      child: ClipRRect(
+                                          borderRadius:BorderRadius.circular(100),
+                                          child: Image.asset("assets/qualitiesimages/friendly.png",height: 120,width: 120,)),
+                                    ),
+                                    Text(userprofiledetails.userProfileModel!.otherDetails!.trait![1].toString()),
+
+                                    //Text("2"),
+                                    Text("Friendly"),
+                                  ],),
+                                  Column(children: [
+                                    CircleAvatar(
+                                      backgroundColor: Colors.grey,
+                                      radius: 30,
+                                      child: ClipRRect(
+                                          borderRadius:BorderRadius.circular(100),
+                                          child: Image.asset("assets/qualitiesimages/intelligent.png",height: 120,width: 120,)),
+                                    ),
+                                    Text(userprofiledetails.userProfileModel!.otherDetails!.trait![2].toString()),
+
+                                    //Text("2"),
+                                    Text("Intelligent"),
+                                  ],),
+                                ],
+                              ),
+                              SizedBox(height: 20,),
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Column(children: [
+                                    CircleAvatar(
+                                      backgroundColor: Colors.grey,
+                                      radius: 30,
+                                      child: ClipRRect(
+                                          borderRadius:BorderRadius.circular(100),
+                                          child: Image.asset("assets/qualitiesimages/handsome.png",height: 120,width: 120,)),
+                                    ),
+                                    Text(userprofiledetails.userProfileModel!.otherDetails!.trait![3].toString()),
+
+                                    //Text("2"),
+                                    Text("Good Looking"),
+                                  ],),
+                                  Column(children: [
+                                    CircleAvatar(
+                                      backgroundColor: Colors.grey,
+                                      radius: 30,
+                                      child: ClipRRect(
+                                          borderRadius:BorderRadius.circular(100),
+                                          child: Image.asset("assets/qualitiesimages/patience.png",height: 120,width: 120,)),
+                                    ),
+                                    Text(userprofiledetails.userProfileModel!.otherDetails!.trait![4].toString()),
+
+                                    //Text("2"),
+                                    Text("Patient"),
+                                  ],),
+                                  Column(children: [
+                                    CircleAvatar(
+                                      backgroundColor: Colors.grey,
+                                      radius: 30,
+                                      child: ClipRRect(
+
+                                          borderRadius:BorderRadius.circular(100),
+                                          child: Image.asset("assets/qualitiesimages/trust.png",height: 120,width: 120,)),
+                                    ),
+                                    Text(userprofiledetails.userProfileModel!.otherDetails!.trait![5].toString()),
+                                    //Text("2"),
+                                    Text("Trustworthy"),
+                                  ],),
+                                ],
+                              ),
+
+
+                            ],),
+
+
+
+                          SizedBox(height: 20,),
+
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Column(children: [
+                                Row(
+                                  children: [
+                                    Text(userprofiledetails.userProfileModel!.otherDetails.avgRating!.toString(),style: TextStyle(fontSize: 18),),
+                                    //Text("3.5",style: TextStyle(fontSize: 18),),
+                                    Icon(Icons.star,color: Colors.orangeAccent,),
+                                  ],
+                                ),
+                                Text("${userprofiledetails.userProfileModel!.otherDetails.totalRatings.toString()} Rating",style: TextStyle(color: Colors.grey),),
+                                //Text("7 Rating",style: TextStyle(color: Colors.grey),),
+                                Text("${userprofiledetails.userProfileModel!.otherDetails.reviewCount.toString()} review",style: TextStyle(color: Colors.grey),),
+                              ],),
+
+                              Container(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    SizedBox(height: 8),
+                                    chartRow(context, '5', userprofiledetails.userProfileModel!.otherDetails.ratingPercents[4]),
+                                    chartRow(context, '4', userprofiledetails.userProfileModel!.otherDetails.ratingPercents[3]),
+                                    chartRow(context, '3', userprofiledetails.userProfileModel!.otherDetails.ratingPercents[2]),
+                                    chartRow(context, '4', userprofiledetails.userProfileModel!.otherDetails.ratingPercents[1]),
+                                    chartRow(context, '1', userprofiledetails.userProfileModel!.otherDetails.ratingPercents[0]),
+                                    SizedBox(height: 8),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+
+                          /*  Container(
+                                    decoration: BoxDecoration(
+                                        color:Color(0xffFFE6E6),
+
+                                        borderRadius: BorderRadius.circular(12)
+                                    ),
+                                    width: double.infinity,
+                                    //height: isExpanded ? null : 300,
+                                    padding: EdgeInsets.all(10.0),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text("Reviews",style: TextStyle(fontWeight: FontWeight.w500,fontSize: 20),),
+                                        SizedBox(height: 10,),
+                                        Text(
+                                          'Truecaller reviews seem mostly positive. As of September 2022, the app has a 4.5-star ',
+                                          style: TextStyle(fontSize: 16.0),
+                                        ),
+                                        SizedBox(height: 16.0),
+                                        if (isExpanded)
+                                          Text(
+                                            'rating from 251.8K reviews on the App Store. On Google Play, it maintains its 4.5-star rating average with 18.1M reviews',
+                                            style: TextStyle(fontSize: 16.0),
+                                          ),
+                                        SizedBox(height: 16.0),
+                                        TextButton(
+                                          onPressed: () {
+                                            setState(() {
+                                              isExpanded = !isExpanded;
+                                            });
+                                          },
+                                          child: Text(
+                                            isExpanded ? 'View less' : 'View more',
+                                            style: TextStyle(color: Colors.blue),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),*/
+
+                          Column(
+                            children: [
+                              Text("Reviews",style: TextStyle(fontWeight: FontWeight.w500,fontSize: 20),),
+                              ListView.separated(
+                                separatorBuilder: (BuildContext context, int index) => const Divider(),
+
+                                shrinkWrap: true,
+                                physics:  NeverScrollableScrollPhysics(),
+                                itemBuilder: (context , int index){
+                                  return
+                                    Container(
+                                      decoration: BoxDecoration(
+                                          color:Color(0xffebfabe),
+                                          border: Border.all(color:Colors.green),
+                                          borderRadius: BorderRadius.circular(12)
+                                      ),
+                                      width: double.infinity,
+                                      //height: isExpanded ? null : 300,
+                                      padding: EdgeInsets.all(10.0),
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
-                                          Text("Rating",style:TextStyle(fontSize: 20,fontWeight: FontWeight.w500),),
-                                          IgnorePointer(
+
+                                          Row(children: [
+                                            CircleAvatar(
+                                              radius: 20.0, // Adjust the radius as needed
+                                              backgroundImage: NetworkImage(userprofiledetails.userProfileModel!.otherDetails.reviews[index].profilePhoto.toString()),
+                                            ),
+                                            SizedBox(width: 10,),
+                                            Text(userprofiledetails.userProfileModel!.otherDetails.reviews[0].name??" ",style: TextStyle(fontWeight: FontWeight.w400,fontSize: 18),),
+
+                                          ],),
+
+                                          SizedBox(height: 10,),
+
+                                          /*   IgnorePointer(
                                             ignoring: true, // Disables user interaction
                                             child: RatingBar.builder(
-                                              initialRating: double.tryParse(snapshot.data!.otherDetails.avgRating!.toString()) ?? 0.0,
-                                             // initialRating: 2,
+                                              initialRating: double.tryParse(snapshot.data!.contact!.rating.toString()) ?? 0.0,
                                               minRating: 1,
                                               direction: Axis.horizontal,
                                               allowHalfRating: true,
@@ -337,315 +582,56 @@ class _Profile_newState extends State<Profile_new> {
                                                 // Handle the updated rating if needed
                                               },
                                             ),
+                                          ),*/
+
+                                          Text(
+                                            userprofiledetails.userProfileModel!.otherDetails.reviews[index].review.toString(),
+                                            //'Truecaller reviews seem mostly positive. As of September 2022, the app has a 4.5-star ',
+                                            style: TextStyle(fontSize: 16.0),
                                           ),
-                                          Spacer(),
-                                          Text(snapshot.data!.otherDetails.avgRating!.toString()),
-
-
+                                          SizedBox(height: 16.0),
+                                          // if (isExpanded)
+                                          //   Text(
+                                          //     'rating from 251.8K reviews on the App Store. On Google Play, it maintains its 4.5-star rating average with 18.1M reviews',
+                                          //     style: TextStyle(fontSize: 16.0),
+                                          //   ),
+                                          // SizedBox(height: 16.0),
+                                          // TextButton(
+                                          //   onPressed: () {
+                                          //     setState(() {
+                                          //       isExpanded = !isExpanded;
+                                          //     });
+                                          //   },
+                                          //   child: Text(
+                                          //     isExpanded ? 'View less' : 'View more',
+                                          //     style: TextStyle(color: Colors.blue),
+                                          //   ),
+                                          //),
                                         ],
                                       ),
+                                    );
 
-                                    ],
-                                  ),
-                                ),
-
-
-                                SizedBox(height: 20,),
-
-
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Row(
-                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-
-                                        Column(children: [
-                                          CircleAvatar(
-                                            backgroundColor: Colors.grey,
-                                            radius: 30,
-                                            child: ClipRRect(
-                                                borderRadius:BorderRadius.circular(100),
-                                                child: Image.asset("assets/qualitiesimages/extrovert.png",height: 120,width: 120,)),
-                                          ),
-
-                                          Text(snapshot.data!.otherDetails!.trait![0].toString()),
-                                         // Text("2"),
-                                          Text("Extrovert"),
-                                        ],),
-                                        Column(children: [
-                                          CircleAvatar(
-                                            backgroundColor: Colors.grey,
-                                            radius: 30,
-                                            child: ClipRRect(
-                                                borderRadius:BorderRadius.circular(100),
-                                                child: Image.asset("assets/qualitiesimages/friendly.png",height: 120,width: 120,)),
-                                          ),
-                                          Text(snapshot.data!.otherDetails!.trait![1].toString()),
-
-                                          //Text("2"),
-                                          Text("Friendly"),
-                                        ],),
-                                        Column(children: [
-                                          CircleAvatar(
-                                            backgroundColor: Colors.grey,
-                                            radius: 30,
-                                            child: ClipRRect(
-                                                borderRadius:BorderRadius.circular(100),
-                                                child: Image.asset("assets/qualitiesimages/intelligent.png",height: 120,width: 120,)),
-                                          ),
-                                          Text(snapshot.data!.otherDetails!.trait![2].toString()),
-
-                                          //Text("2"),
-                                          Text("Intelligent"),
-                                        ],),
-                                      ],
-                                    ),
-                                    SizedBox(height: 20,),
-                                    Row(
-                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                      children: [
-                                        Column(children: [
-                                          CircleAvatar(
-                                            backgroundColor: Colors.grey,
-                                            radius: 30,
-                                            child: ClipRRect(
-                                                borderRadius:BorderRadius.circular(100),
-                                                child: Image.asset("assets/qualitiesimages/handsome.png",height: 120,width: 120,)),
-                                          ),
-                                          Text(snapshot.data!.otherDetails!.trait![3].toString()),
-
-                                          //Text("2"),
-                                          Text("Good Looking"),
-                                        ],),
-                                        Column(children: [
-                                          CircleAvatar(
-                                            backgroundColor: Colors.grey,
-                                            radius: 30,
-                                            child: ClipRRect(
-                                                borderRadius:BorderRadius.circular(100),
-                                                child: Image.asset("assets/qualitiesimages/patience.png",height: 120,width: 120,)),
-                                          ),
-                                          Text(snapshot.data!.otherDetails!.trait![4].toString()),
-
-                                          //Text("2"),
-                                          Text("Patient"),
-                                        ],),
-                                        Column(children: [
-                                          CircleAvatar(
-                                            backgroundColor: Colors.grey,
-                                            radius: 30,
-                                            child: ClipRRect(
-
-                                                borderRadius:BorderRadius.circular(100),
-                                                child: Image.asset("assets/qualitiesimages/trust.png",height: 120,width: 120,)),
-                                          ),
-                                          Text(snapshot.data!.otherDetails!.trait![5].toString()),
-                                          //Text("2"),
-                                          Text("Trustworthy"),
-                                        ],),
-                                      ],
-                                    ),
-
-
-                                  ],),
-
-
-
-                                SizedBox(height: 20,),
-
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Column(children: [
-                                      Row(
-                                        children: [
-                                          Text(snapshot.data!.otherDetails.avgRating!.toString(),style: TextStyle(fontSize: 18),),
-                                          //Text("3.5",style: TextStyle(fontSize: 18),),
-                                          Icon(Icons.star,color: Colors.orangeAccent,),
-                                        ],
-                                      ),
-                                      Text("${snapshot.data!.otherDetails.totalRatings.toString()} Rating",style: TextStyle(color: Colors.grey),),
-                                      //Text("7 Rating",style: TextStyle(color: Colors.grey),),
-                                      Text("${snapshot.data!.otherDetails.reviewCount.toString()} review",style: TextStyle(color: Colors.grey),),
-                                    ],),
-
-                                    Container(
-                                      child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.center,
-                                        children: [
-                                          SizedBox(height: 8),
-                                          chartRow(context, '5', snapshot.data!.otherDetails.ratingPercents[4]),
-                                          chartRow(context, '4', snapshot.data!.otherDetails.ratingPercents[3]),
-                                          chartRow(context, '3', snapshot.data!.otherDetails.ratingPercents[2]),
-                                          chartRow(context, '4', snapshot.data!.otherDetails.ratingPercents[1]),
-                                          chartRow(context, '1', snapshot.data!.otherDetails.ratingPercents[0]),
-                                          SizedBox(height: 8),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-
-                              /*  Container(
-                                  decoration: BoxDecoration(
-                                      color:Color(0xffFFE6E6),
-
-                                      borderRadius: BorderRadius.circular(12)
-                                  ),
-                                  width: double.infinity,
-                                  //height: isExpanded ? null : 300,
-                                  padding: EdgeInsets.all(10.0),
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Text("Reviews",style: TextStyle(fontWeight: FontWeight.w500,fontSize: 20),),
-                                      SizedBox(height: 10,),
-                                      Text(
-                                        'Truecaller reviews seem mostly positive. As of September 2022, the app has a 4.5-star ',
-                                        style: TextStyle(fontSize: 16.0),
-                                      ),
-                                      SizedBox(height: 16.0),
-                                      if (isExpanded)
-                                        Text(
-                                          'rating from 251.8K reviews on the App Store. On Google Play, it maintains its 4.5-star rating average with 18.1M reviews',
-                                          style: TextStyle(fontSize: 16.0),
-                                        ),
-                                      SizedBox(height: 16.0),
-                                      TextButton(
-                                        onPressed: () {
-                                          setState(() {
-                                            isExpanded = !isExpanded;
-                                          });
-                                        },
-                                        child: Text(
-                                          isExpanded ? 'View less' : 'View more',
-                                          style: TextStyle(color: Colors.blue),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),*/
-
-                                Column(
-                                  children: [
-                                    Text("Reviews",style: TextStyle(fontWeight: FontWeight.w500,fontSize: 20),),
-                                    ListView.separated(
-                                      separatorBuilder: (BuildContext context, int index) => const Divider(),
-
-                                      shrinkWrap: true,
-                                      physics:  NeverScrollableScrollPhysics(),
-                                      itemBuilder: (context , int index){
-                                        return
-                                          Container(
-                                            decoration: BoxDecoration(
-                                                color:Color(0xffebfabe),
-                                                border: Border.all(color:Colors.green),
-                                                borderRadius: BorderRadius.circular(12)
-                                            ),
-                                            width: double.infinity,
-                                            //height: isExpanded ? null : 300,
-                                            padding: EdgeInsets.all(10.0),
-                                            child: Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                              children: [
-
-                                                Row(children: [
-                                                  CircleAvatar(
-                                                    radius: 20.0, // Adjust the radius as needed
-                                                    backgroundImage: NetworkImage(snapshot.data!.otherDetails.reviews[index].profilePhoto.toString()),
-                                                  ),
-                                                  SizedBox(width: 10,),
-                                                  Text(snapshot.data!.otherDetails.reviews[0].name??" ",style: TextStyle(fontWeight: FontWeight.w400,fontSize: 18),),
-
-                                                ],),
-
-                                                SizedBox(height: 10,),
-
-                                                /*   IgnorePointer(
-                                          ignoring: true, // Disables user interaction
-                                          child: RatingBar.builder(
-                                            initialRating: double.tryParse(snapshot.data!.contact!.rating.toString()) ?? 0.0,
-                                            minRating: 1,
-                                            direction: Axis.horizontal,
-                                            allowHalfRating: true,
-                                            itemCount: 5,
-                                            itemSize: 20.0,
-                                            unratedColor: Colors.grey[300],
-                                            itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
-                                            itemBuilder: (context, _) => Icon(
-                                              Icons.star,
-                                              color: Colors.amber,
-                                            ),
-                                            onRatingUpdate: (double rating) {
-                                              // Handle the updated rating if needed
-                                            },
-                                          ),
-                                        ),*/
-
-                                                Text(
-                                                  snapshot.data!.otherDetails.reviews[index].review.toString(),
-                                                  //'Truecaller reviews seem mostly positive. As of September 2022, the app has a 4.5-star ',
-                                                  style: TextStyle(fontSize: 16.0),
-                                                ),
-                                                SizedBox(height: 16.0),
-                                                // if (isExpanded)
-                                                //   Text(
-                                                //     'rating from 251.8K reviews on the App Store. On Google Play, it maintains its 4.5-star rating average with 18.1M reviews',
-                                                //     style: TextStyle(fontSize: 16.0),
-                                                //   ),
-                                                // SizedBox(height: 16.0),
-                                                // TextButton(
-                                                //   onPressed: () {
-                                                //     setState(() {
-                                                //       isExpanded = !isExpanded;
-                                                //     });
-                                                //   },
-                                                //   child: Text(
-                                                //     isExpanded ? 'View less' : 'View more',
-                                                //     style: TextStyle(color: Colors.blue),
-                                                //   ),
-                                                //),
-                                              ],
-                                            ),
-                                          );
-
-                                      },
-                                      itemCount:snapshot.data!.otherDetails.reviews.length,
-                                    ),
-                                  ],
-                                ),
+                                },
+                                itemCount:userprofiledetails.userProfileModel!.otherDetails.reviews.length,
+                              ),
+                            ],
+                          ),
 
 
 //sign up button
-                                SizedBox(height: 20,),
+                          SizedBox(height: 20,),
 
 
-                              ],
-                            );
-                          }
-                          else{
-                            return
-                              Expanded(
-                                child: Container(
-                                    height:500,
-                                    child: Center(child: CircularProgressIndicator())),
-                              );
+                        ],
+                      ),
 
-                          }
 
-                        }
+
                     ),
-
-
-
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           )
       ),
     );
@@ -693,7 +679,7 @@ class _Profile_newState extends State<Profile_new> {
     );
   }
 
-  Future<UserProfileModel?> getprofiledata() async {
+/*  Future<UserProfileModel?> getprofiledata() async {
     // Create Dio instance
     Dio dio = Dio();
 
@@ -724,7 +710,7 @@ class _Profile_newState extends State<Profile_new> {
       // Handle any errors
       print('An error occurred: $error');
     }
-  }
+  }*/
 
 
 }

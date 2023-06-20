@@ -190,6 +190,7 @@ class _Friends_ProfileState extends State<Friends_Profile> {
     bool? res = await FlutterPhoneDirectCaller.callNumber(phone);
   }
 
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -215,7 +216,9 @@ class _Friends_ProfileState extends State<Friends_Profile> {
                       //print("traits  ${sum.toString()}");
                      username= snapshot.data!.contact!.contactName.toString();
 
-                      return Column(
+                      return
+
+                        Column(
                         children: [
 
                           SizedBox(height: 10,),
