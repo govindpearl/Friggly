@@ -129,7 +129,7 @@ class _CallLogScreenState extends State<CallLogScreen> {
           )),
           backgroundColor: Colors.greenAccent,
         ),
-       // appBar: AppBar(title: const Text('call_log example')),
+        // appBar: AppBar(title: const Text('call_log example')),
         body:
         Container(
           decoration: BoxDecoration(
@@ -153,58 +153,58 @@ class _CallLogScreenState extends State<CallLogScreen> {
 
                     return
                       Scrollbar(
-                      child:
+                        child:
 
 
-                      ListView.builder(
-                        itemCount: _callLogs.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          CallLogEntry callLog = _callLogs[index];
-                          return Row(
-                            children: [
-                              Expanded(
-                                flex:4,
-                                child: InkWell(
-                                  onTap: (){
-                                    _callNumber(phone:callLog.number ?? '');
+                        ListView.builder(
+                          itemCount: _callLogs.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            CallLogEntry callLog = _callLogs[index];
+                            return Row(
+                              children: [
+                                Expanded(
+                                  flex:4,
+                                  child: InkWell(
+                                    onTap: (){
+                                      _callNumber(phone:callLog.number ?? '');
 
-                                  },
-                                  child: ListTile(
-                                    leading: CircleAvatar(
-                                      child: Icon(Icons.person),
-                                    ),
-                                    title: Text(callLog.name ?? 'Unknown number',style: TextStyle(color: Colors.white,fontSize: 17)),
-                                    subtitle: Row(
-                                      children: [
-                                        Text(callLog.number ?? '',style: TextStyle(color: Colors.white70)),
-                                        SizedBox(width: 16,),
-                                        Text(callLog.callType.toString().split(" ")[0].replaceRange(0, 9, "")?? "",style: TextStyle(color: Colors.white70),),
-                                         //Text(callLog.duration)
-                                      ],
+                                    },
+                                    child: ListTile(
+                                      leading: CircleAvatar(
+                                        child: Icon(Icons.person),
+                                      ),
+                                      title: Text(callLog.name ?? 'Unknown number',style: TextStyle(color: Colors.white,fontSize: 17)),
+                                      subtitle: Row(
+                                        children: [
+                                          Text(callLog.number ?? '',style: TextStyle(color: Colors.white70)),
+                                          SizedBox(width: 16,),
+                                          Text(callLog.callType.toString().split(" ")[0].replaceRange(0, 9, "")?? "",style: TextStyle(color: Colors.white70),),
+                                          //Text(callLog.duration)
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),
-                             // Spacer(),
-                              Expanded(
-                                flex:0,
-                                child: InkWell(
-                                    onTap:(){
-                                      Navigator.push(context, MaterialPageRoute(builder: (context)=>Friends_Profile(namee: callLog.name ?? 'Unknown number',mobile: callLog.number ?? '',)));
-                                    },
-                                    child: Icon(Icons.arrow_forward_ios)),
-                              ),
-                              SizedBox(width: 5,),
-                            ],
-                          );
-                        },
-                      ),
+                                // Spacer(),
+                                Expanded(
+                                  flex:0,
+                                  child: InkWell(
+                                      onTap:(){
+                                        Navigator.push(context, MaterialPageRoute(builder: (context)=>Friends_Profile(namee: callLog.name ?? 'Unknown number',mobile: callLog.number ?? '',)));
+                                      },
+                                      child: Icon(Icons.arrow_forward_ios)),
+                                ),
+                                SizedBox(width: 5,),
+                              ],
+                            );
+                          },
+                        ),
 
 
 
 
 
-                    /*  ListView.builder(
+                        /*  ListView.builder(
                         itemBuilder: (context, index) {
                           var entry = entries[index];
                           var mono = TextStyle(fontFamily: 'monospace');
@@ -288,7 +288,7 @@ class _CallLogScreenState extends State<CallLogScreen> {
 
 
 
-                    );
+                      );
                   }),
               Positioned(
                   right: 20,
@@ -313,47 +313,47 @@ class _CallLogScreenState extends State<CallLogScreen> {
   }
 
 
-_showBottomSheetDialog(
-    {required BuildContext context}) {
- // TextEditingController usernameController = TextEditingController();
-  // Future<String> getData() {
-  //   return Future.delayed(Duration(seconds: 2), () {
-  //     return "I am data";
-  //     // throw Exception("Custom Error");
-  //   });
-  // }
+  _showBottomSheetDialog(
+      {required BuildContext context}) {
+    // TextEditingController usernameController = TextEditingController();
+    // Future<String> getData() {
+    //   return Future.delayed(Duration(seconds: 2), () {
+    //     return "I am data";
+    //     // throw Exception("Custom Error");
+    //   });
+    // }
 
-  return showModalBottomSheet<void>(
-      context: context,
-      builder: (BuildContext context) {
-        //var _namecontroller;
-        return DialPad(
-            enableDtmf: true,
-            //outputMask: "(000) 000-0000",
-            hideSubtitle: false,
+    return showModalBottomSheet<void>(
+        context: context,
+        builder: (BuildContext context) {
+          //var _namecontroller;
+          return DialPad(
+              enableDtmf: true,
+              //outputMask: "(000) 000-0000",
+              hideSubtitle: false,
 
-            backspaceButtonIconColor: Colors.red,
-            buttonTextColor: Colors.black,
-            dialOutputTextColor: Colors.black,
-            keyPressed: (value) async {
+              backspaceButtonIconColor: Colors.red,
+              buttonTextColor: Colors.black,
+              dialOutputTextColor: Colors.black,
+              keyPressed: (value) async {
 
-              print('$value was pressed');
-            },
-            makeCall: (numberr) async {
-              print(numberr);
-              var number ="${numberr?? ""}"; //set the number here
-              bool? res = await FlutterPhoneDirectCaller.callNumber(number);
+                print('$value was pressed');
+              },
+              makeCall: (numberr) async {
+                print(numberr);
+                var number ="${numberr?? ""}"; //set the number here
+                bool? res = await FlutterPhoneDirectCaller.callNumber(number);
 
-              // Uri phoneno = Uri.parse('tel:'"${number}");
-              // if (await launchUrl(phoneno)) {
-              // //dialer opened
-              // }else{
-              // //dailer is not opened
-              // }
-            }
-        );
-      });
-}
+                // Uri phoneno = Uri.parse('tel:'"${number}");
+                // if (await launchUrl(phoneno)) {
+                // //dialer opened
+                // }else{
+                // //dailer is not opened
+                // }
+              }
+          );
+        });
+  }
 
 }
 

@@ -588,7 +588,7 @@ class _Friends_ProfileState extends State<Friends_Profile> {
 
                                     SizedBox(height: 10,),
 
-                                 /*   IgnorePointer(
+   IgnorePointer(
                                       ignoring: true, // Disables user interaction
                                       child: RatingBar.builder(
                                         initialRating: double.tryParse(snapshot.data!.contact!.rating.toString()) ?? 0.0,
@@ -607,7 +607,8 @@ class _Friends_ProfileState extends State<Friends_Profile> {
                                           // Handle the updated rating if needed
                                         },
                                       ),
-                                    ),*/
+                                    ),
+
 
                                     Text(
                                       snapshot.data!.contact.reviews[index].review??" ",

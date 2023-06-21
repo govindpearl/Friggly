@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:friggly/API_COLLECTION.dart';
 import 'package:get/get.dart';
 import '../ModelClass/user_profile_model.dart';
 import 'package:http/http.dart' as http;
@@ -24,7 +25,7 @@ class Userprofiledetails extends GetxController{
       'Authorization': 'Bearer ${AppPreferences.getToken()}'
     };
 
-    var uri = Uri.parse('https://test.pearl-developer.com/friglly/public/api/get-profile');
+    var uri = Uri.parse(GET_PROFILE_URL);
 
     try {
       isLoading(true);

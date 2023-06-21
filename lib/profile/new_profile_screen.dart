@@ -187,20 +187,21 @@ class _Profile_newState extends State<Profile_new> {
     return SafeArea(
       child: Scaffold(
           body:
-          Obx(()=>userprofiledetails.isLoading.value?Center(child: CircularProgressIndicator(),):
-             Column(
-              children: [
-                Align(
-                  alignment: Alignment.topRight,
-                  child:
-                  InkWell(
-                      onTap: (){
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=>Settingscreen()));
-                      },
-                      child: Icon(Icons.settings,size: 30,)),
-                ),
-                Expanded(
-                  child: SingleChildScrollView(
+          Column(
+            children: [
+              Align(
+                alignment: Alignment.topRight,
+                child:
+                InkWell(
+                    onTap: (){
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=>Settingscreen()));
+                    },
+                    child: Icon(Icons.settings,size: 30,)),
+              ),
+              Expanded(
+                child: Obx(
+                      ()=>userprofiledetails.isLoading.value?Center(child: CircularProgressIndicator(),):
+                  SingleChildScrollView(
                     child: Padding(
                       padding:  EdgeInsets.only(left: 16,right: 16,top: 10,),
                       child:
@@ -250,7 +251,7 @@ class _Profile_newState extends State<Profile_new> {
 
                           SizedBox(height: 15,),
                           //Text(snapshot.data!.profile!.name.toString(),style: TextStyle(fontWeight: FontWeight.w700,fontSize: 24),),
-                           Text(userprofiledetails.userProfileModel!.profile.name.toString(),style: TextStyle(fontWeight: FontWeight.w700,fontSize: 24),),
+                          Text(userprofiledetails.userProfileModel!.profile.name.toString(),style: TextStyle(fontWeight: FontWeight.w700,fontSize: 24),),
                           //  Text(snapshot.data!.profile!.name.toString(),style: TextStyle(fontWeight: FontWeight.w700,fontSize: 24),),
                           //Text(snapshot.data!.profile!.name.toString(),style: TextStyle(fontWeight: FontWeight.w700,fontSize: 24),),
 
@@ -489,44 +490,44 @@ class _Profile_newState extends State<Profile_new> {
                           ),
 
                           /*  Container(
-                                    decoration: BoxDecoration(
-                                        color:Color(0xffFFE6E6),
+                                      decoration: BoxDecoration(
+                                          color:Color(0xffFFE6E6),
 
-                                        borderRadius: BorderRadius.circular(12)
-                                    ),
-                                    width: double.infinity,
-                                    //height: isExpanded ? null : 300,
-                                    padding: EdgeInsets.all(10.0),
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Text("Reviews",style: TextStyle(fontWeight: FontWeight.w500,fontSize: 20),),
-                                        SizedBox(height: 10,),
-                                        Text(
-                                          'Truecaller reviews seem mostly positive. As of September 2022, the app has a 4.5-star ',
-                                          style: TextStyle(fontSize: 16.0),
-                                        ),
-                                        SizedBox(height: 16.0),
-                                        if (isExpanded)
+                                          borderRadius: BorderRadius.circular(12)
+                                      ),
+                                      width: double.infinity,
+                                      //height: isExpanded ? null : 300,
+                                      padding: EdgeInsets.all(10.0),
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text("Reviews",style: TextStyle(fontWeight: FontWeight.w500,fontSize: 20),),
+                                          SizedBox(height: 10,),
                                           Text(
-                                            'rating from 251.8K reviews on the App Store. On Google Play, it maintains its 4.5-star rating average with 18.1M reviews',
+                                            'Truecaller reviews seem mostly positive. As of September 2022, the app has a 4.5-star ',
                                             style: TextStyle(fontSize: 16.0),
                                           ),
-                                        SizedBox(height: 16.0),
-                                        TextButton(
-                                          onPressed: () {
-                                            setState(() {
-                                              isExpanded = !isExpanded;
-                                            });
-                                          },
-                                          child: Text(
-                                            isExpanded ? 'View less' : 'View more',
-                                            style: TextStyle(color: Colors.blue),
+                                          SizedBox(height: 16.0),
+                                          if (isExpanded)
+                                            Text(
+                                              'rating from 251.8K reviews on the App Store. On Google Play, it maintains its 4.5-star rating average with 18.1M reviews',
+                                              style: TextStyle(fontSize: 16.0),
+                                            ),
+                                          SizedBox(height: 16.0),
+                                          TextButton(
+                                            onPressed: () {
+                                              setState(() {
+                                                isExpanded = !isExpanded;
+                                              });
+                                            },
+                                            child: Text(
+                                              isExpanded ? 'View less' : 'View more',
+                                              style: TextStyle(color: Colors.blue),
+                                            ),
                                           ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),*/
+                                        ],
+                                      ),
+                                    ),*/
 
                           Column(
                             children: [
@@ -564,25 +565,25 @@ class _Profile_newState extends State<Profile_new> {
                                           SizedBox(height: 10,),
 
                                           /*   IgnorePointer(
-                                            ignoring: true, // Disables user interaction
-                                            child: RatingBar.builder(
-                                              initialRating: double.tryParse(snapshot.data!.contact!.rating.toString()) ?? 0.0,
-                                              minRating: 1,
-                                              direction: Axis.horizontal,
-                                              allowHalfRating: true,
-                                              itemCount: 5,
-                                              itemSize: 20.0,
-                                              unratedColor: Colors.grey[300],
-                                              itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
-                                              itemBuilder: (context, _) => Icon(
-                                                Icons.star,
-                                                color: Colors.amber,
+                                              ignoring: true, // Disables user interaction
+                                              child: RatingBar.builder(
+                                                initialRating: double.tryParse(snapshot.data!.contact!.rating.toString()) ?? 0.0,
+                                                minRating: 1,
+                                                direction: Axis.horizontal,
+                                                allowHalfRating: true,
+                                                itemCount: 5,
+                                                itemSize: 20.0,
+                                                unratedColor: Colors.grey[300],
+                                                itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
+                                                itemBuilder: (context, _) => Icon(
+                                                  Icons.star,
+                                                  color: Colors.amber,
+                                                ),
+                                                onRatingUpdate: (double rating) {
+                                                  // Handle the updated rating if needed
+                                                },
                                               ),
-                                              onRatingUpdate: (double rating) {
-                                                // Handle the updated rating if needed
-                                              },
-                                            ),
-                                          ),*/
+                                            ),*/
 
                                           Text(
                                             userprofiledetails.userProfileModel!.otherDetails.reviews[index].review.toString(),
@@ -630,9 +631,9 @@ class _Profile_newState extends State<Profile_new> {
                     ),
                   ),
                 ),
-              ],
-            ),
-          )
+              ),
+            ],
+          ),
       ),
     );
 

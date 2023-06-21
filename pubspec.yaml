@@ -47,7 +47,6 @@ dependencies:
   flutter_otp_text_field: ^1.1.1
   otp_timer_button: ^1.1.0
   flutter_switch: ^0.3.2
-  call_log: ^4.0.0
   workmanager: ^0.5.1
   intl: ^0.18.0
   flutter_phone_direct_caller: ^2.1.1
@@ -75,6 +74,7 @@ dependencies:
   flutter_easyloading: ^3.0.5
   phone_state_background: ^0.0.4
   cached_network_image: ^3.2.3
+  call_log: ^4.0.0
 
 
 
