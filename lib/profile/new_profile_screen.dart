@@ -26,6 +26,7 @@ class Profile_new extends StatefulWidget {
 
 class _Profile_newState extends State<Profile_new> {
 
+
   Userprofiledetails userprofiledetails = Get.put(Userprofiledetails());
 
 
@@ -200,15 +201,13 @@ class _Profile_newState extends State<Profile_new> {
               ),
               Expanded(
                 child: Obx(
-                      ()=>userprofiledetails.isLoading.value?Center(child: CircularProgressIndicator(),):
+                      ()=>userprofiledetails!.isLoading!.value?Center(child: CircularProgressIndicator(),):
                   SingleChildScrollView(
                     child: Padding(
                       padding:  EdgeInsets.only(left: 16,right: 16,top: 10,),
                       child:
                       Column(
                         children: [
-
-
                           SizedBox(height: 10,),
 
                           Stack(children: [
@@ -231,7 +230,7 @@ class _Profile_newState extends State<Profile_new> {
                                       : ClipRRect(
                                       borderRadius: BorderRadius.circular(100),
                                       //onTap: imagePickerOption,
-                                      child: Image.network(userprofiledetails.userProfileModel!.image.toString(),height: 135,width: 135,fit: BoxFit.fill,)
+                                      child: Image.network(userprofiledetails!.userProfileModel!.image!.toString(),height: 135,width: 135,fit: BoxFit.fill,)
 
                                   ),
                                 ),
@@ -251,8 +250,8 @@ class _Profile_newState extends State<Profile_new> {
 
                           SizedBox(height: 15,),
                           //Text(snapshot.data!.profile!.name.toString(),style: TextStyle(fontWeight: FontWeight.w700,fontSize: 24),),
-                          Text(userprofiledetails.userProfileModel!.profile.name.toString(),style: TextStyle(fontWeight: FontWeight.w700,fontSize: 24),),
-                          //  Text(snapshot.data!.profile!.name.toString(),style: TextStyle(fontWeight: FontWeight.w700,fontSize: 24),),
+                          Text(userprofiledetails!.userProfileModel!.profile.name.toString(),style: TextStyle(fontWeight: FontWeight.w700,fontSize: 24),),
+                          //Text(snapshot.data!.profile!.name.toString(),style: TextStyle(fontWeight: FontWeight.w700,fontSize: 24),),
                           //Text(snapshot.data!.profile!.name.toString(),style: TextStyle(fontWeight: FontWeight.w700,fontSize: 24),),
 
                           Container(
@@ -274,28 +273,28 @@ class _Profile_newState extends State<Profile_new> {
                                   children: [
                                     Icon(Icons.phone,color: Color(0xff03B96E),),
                                     SizedBox(width: 10,),
-                                    Text(userprofiledetails.userProfileModel!.profile!.mobileNo.toString()),
+                                    Text(userprofiledetails!.userProfileModel!.profile!.mobileNo.toString()),
                                   ],
                                 ),
                                 Row(
                                   children: [
                                     Icon(Icons.email,color: Color(0xff03B96E),),
                                     SizedBox(width: 10,),
-                                    Text(userprofiledetails.userProfileModel!.profile!.email.toString()),
+                                    Text(userprofiledetails!.userProfileModel!.profile!.email.toString()),
                                   ],
                                 ),
                                 Row(
                                   children: [
                                     Icon(Icons.male_sharp,color: Color(0xff03B96E),),
                                     SizedBox(width: 10,),
-                                    Text(userprofiledetails.userProfileModel!.profile!.gender.toString()),
+                                    Text(userprofiledetails!.userProfileModel!.profile!.gender.toString()),
                                   ],
                                 ),
                                 Row(
                                   children: [
                                     Icon(Icons.date_range,color: Color(0xff03B96E),),
                                     SizedBox(width: 10,),
-                                    Text(userprofiledetails.userProfileModel!.profile!.doB.toString()),
+                                    Text(userprofiledetails!.userProfileModel!.profile!.doB.toString()),
                                   ],
                                 ),
 
@@ -319,7 +318,7 @@ class _Profile_newState extends State<Profile_new> {
                                     IgnorePointer(
                                       ignoring: true, // Disables user interaction
                                       child: RatingBar.builder(
-                                        initialRating: double.tryParse(userprofiledetails.userProfileModel!.otherDetails.avgRating!.toString()) ?? 0.0,
+                                        initialRating: double.tryParse(userprofiledetails!.userProfileModel!.otherDetails.avgRating!.toString()) ?? 0.0,
                                         // initialRating: 2,
                                         minRating: 1,
                                         direction: Axis.horizontal,
@@ -338,7 +337,7 @@ class _Profile_newState extends State<Profile_new> {
                                       ),
                                     ),
                                     Spacer(),
-                                    Text(userprofiledetails.userProfileModel!.otherDetails.avgRating!.toString()),
+                                    Text(userprofiledetails!.userProfileModel!.otherDetails.avgRating!.toString()),
 
 
                                   ],
