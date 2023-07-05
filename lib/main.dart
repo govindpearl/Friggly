@@ -53,7 +53,8 @@ class _MyAppState extends State<MyApp>{
 
   @override
   Widget build(BuildContext context) {
-    YYDialog.init(context);
+   // MyVariables(context: context);
+    //YYDialog.init(context);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
@@ -78,3 +79,4 @@ class _MyAppState extends State<MyApp>{
     );
   }
 }
+

@@ -4,6 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:phone_state_background/phone_state_background.dart';
+import '../truecaller_message.dart';
 import 'otpscreen.dart';
 class Myphone extends StatefulWidget {
   const Myphone({Key? key}) : super(key: key);
@@ -13,7 +16,13 @@ class Myphone extends StatefulWidget {
   State<Myphone> createState() => _MyphoneState();
 }
 
+
+
+
+
 class _MyphoneState extends State<Myphone> {
+
+
   TextEditingController mobileno = TextEditingController();
   var countryCode;
   @override
@@ -109,8 +118,6 @@ class _MyphoneState extends State<Myphone> {
                               ),
                               onPressed: ()async{
                                 //registerdmobile(mobileno.text.toString());
-
-
 
                                 await FirebaseAuth.instance.verifyPhoneNumber(
                                   phoneNumber:"${"+"+countryCode+mobileno.text}",

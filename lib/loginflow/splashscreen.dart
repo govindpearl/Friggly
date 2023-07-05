@@ -11,6 +11,8 @@ import 'package:phone_state_background/phone_state_background.dart';
 import '../main.dart';
 import '../onboardingScreen.dart';
 import 'mobilenumber.dart';
+import 'package:get/get.dart';
+
 
 /// Be sure to annotate @pragma('vm:entry-point') your callback function to avoid issues in release mode on Flutter >= 3.3.0
 
@@ -26,14 +28,35 @@ Future<void> phoneStateBackgroundCallbackHandler(
     case PhoneStateBackgroundEvent.incomingstart:
 
       print(">>>>>>>>>incoming call");
+
+
+
+
+
       //CustomDialog.YYNoticeDialog();
-      EasyLoading.show(
-          dismissOnTap: true,
-          indicator: Container(child: Column(children: [
-            Text("data",style: TextStyle(color: Colors.red),),
-            Text("data",style: TextStyle(color: Colors.grey),),
-            Text("data",style: TextStyle(color: Colors.white70),),
-          ],)));
+
+
+/*
+      showDialog<void>(
+        context: MyVariables.buildContext,
+        barrierDismissible: true,
+        // false = user must tap button, true = tap outside dialog
+        builder: (BuildContext dialogContext) {
+          return AlertDialog(
+            title: Text('title'),
+            content: Text('dialogBody'),
+            actions: <Widget>[
+              TextButton(
+                child: Text('buttonText'),
+                onPressed: () {
+                  Navigator.of(dialogContext).pop(); // Dismiss alert dialog
+                },
+              ),
+            ],
+          );
+        },
+      );*/
+
       Fluttertoast.showToast(
           msg: 'Incoming call start, number: $number',
           toastLength: Toast.LENGTH_SHORT,
@@ -47,13 +70,20 @@ Future<void> phoneStateBackgroundCallbackHandler(
 
       break;
     case PhoneStateBackgroundEvent.incomingmissed:
-      EasyLoading.show(
-          dismissOnTap: true,
-          indicator: Container(child: Column(children: [
-            Text("data",style: TextStyle(color: Colors.red),),
-            Text("data",style: TextStyle(color: Colors.grey),),
-            Text("data",style: TextStyle(color: Colors.white70),),
-          ],)));
+      Get.dialog(
+        AlertDialog(
+          title: Text('Dialog Title'),
+          content: Text('This is missed.'),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Close'),
+              onPressed: () {
+                Get.back(); // Close the dialog
+              },
+            ),
+          ],
+        ),
+      );
       Fluttertoast.showToast(
           msg: 'Incoming call missed, number: $number',
           toastLength: Toast.LENGTH_SHORT,
@@ -66,13 +96,23 @@ Future<void> phoneStateBackgroundCallbackHandler(
 
       break;
     case PhoneStateBackgroundEvent.incomingreceived:
-      EasyLoading.show(
-          dismissOnTap: true,
-          indicator: Container(child: Column(children: [
-            Text("data",style: TextStyle(color: Colors.red),),
-            Text("data",style: TextStyle(color: Colors.grey),),
-            Text("data",style: TextStyle(color: Colors.white70),),
-          ],)));
+
+
+      // Get.dialog(
+      //   AlertDialog(
+      //     title: Text('Dialog Title'),
+      //     content: Text('This is received.'),
+      //     actions: <Widget>[
+      //       TextButton(
+      //         child: Text('Close'),
+      //         onPressed: () {
+      //           Get.back(); // Close the dialog
+      //         },
+      //       ),
+      //     ],
+      //   ),
+      // );
+
       Fluttertoast.showToast(
           msg: 'Incoming call received, number: $number, duration: $duration s',
           toastLength: Toast.LENGTH_SHORT,
@@ -92,13 +132,6 @@ Future<void> phoneStateBackgroundCallbackHandler(
 
       break;
     case PhoneStateBackgroundEvent.incomingend:
-      EasyLoading.show(
-          dismissOnTap: true,
-          indicator: Container(child: Column(children: [
-            Text("data",style: TextStyle(color: Colors.red),),
-            Text("data",style: TextStyle(color: Colors.grey),),
-            Text("data",style: TextStyle(color: Colors.white70),),
-          ],)));
       Fluttertoast.showToast(
           msg: 'Incoming call ended, number: $number, duration: $duration s',
           toastLength: Toast.LENGTH_SHORT,
@@ -155,6 +188,7 @@ class _SplashScreenState extends State<SplashScreen> with WidgetsBindingObserver
   }
 
 
+
   @override
   void initState() {
     WidgetsBinding.instance.addObserver(this);
@@ -191,7 +225,6 @@ class _SplashScreenState extends State<SplashScreen> with WidgetsBindingObserver
     if(hasPermission ){
       await PhoneStateBackground.initialize(phoneStateBackgroundCallbackHandler);
     }
-
   }
   void _navigateToMainScreen() async {
     await Future.delayed(Duration(seconds: 5));
@@ -218,86 +251,57 @@ class _SplashScreenState extends State<SplashScreen> with WidgetsBindingObserver
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-          body: Container(
-            height: double.infinity,
-            width: double.infinity,
-            decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage("assets/splash.jpg"),
-                  fit: BoxFit.cover,
-                )),
-         /*   child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 20),
-                  child: SizedBox(
-                    width: 180,
-                    child: ElevatedButton(
-                      onPressed: () => _init(),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.green, // Background color
-                      ),
-                      child: const Text('Start Listener'),
-                    ),
-                  ),
-                ),
-                SizedBox(
+        body: Container(
+          height: double.infinity,
+          width: double.infinity,
+          decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage("assets/splash.jpg"),
+                fit: BoxFit.cover,
+              )),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 20),
+                child: SizedBox(
                   width: 180,
                   child: ElevatedButton(
-                    onPressed: () => _stop(),
+                    onPressed: () => _init(),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.red, // Background color
+                      backgroundColor: Colors.green, // Background color
                     ),
-                    child: const Text('Stop Listener'),
+                    child: const Text('Start Listener'),
                   ),
                 ),
-              ],
-            ),*/
-          )
+              ),
+              SizedBox(
+                width: 180,
+                child: ElevatedButton(
+                  onPressed: () => _stop(),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.red, // Background color
+                  ),
+                  child: const Text('Stop Listener'),
+                ),
+              ),
+            ],
+          ),
+        )
     );
   }
 }
 
-class CustomDialog {
-  static YYDialog YYNoticeDialog() {
-    return YYDialog().build()
-      ..width = 120
-      ..height = 110
-      ..backgroundColor = Colors.black.withOpacity(0.8)
-      ..borderRadius = 10.0
-      ..showCallBack = () {
-        print("showCallBack invoke");
-      }
-      ..dismissCallBack = () {
-        print("dismissCallBack invoke");
-      }
-      ..widget(Padding(
-        padding: EdgeInsets.only(top: 21),
-        child: Image.asset(
-          'images/success.png',
-          width: 38,
-          height: 38,
-        ),
-      ))
-      ..widget(Padding(
-        padding: EdgeInsets.only(top: 10),
-        child: Text(
-          "Success",
-          style: TextStyle(
-            fontSize: 15,
-            color: Colors.red,
-          ),
-        ),
-      ))
-      ..animatedFunc = (child, animation) {
-        return ScaleTransition(
-          child: child,
-          scale: Tween(begin: 0.0, end: 1.0).animate(animation),
-        );
-      }
-      ..show();
-  }
-}
+
+
+
+
+
+
+
+
+
+
 
 

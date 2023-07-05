@@ -55,7 +55,7 @@ class _contlistState extends State<contlist> {
       if (await Permission.contacts.request().isGranted) {
         await fetchContacts();
 
-        print('-----> ${_contacts.length}');
+        print('total contacts length ----->${_contacts.length}');
         Map<String,String> contactsMap = Map();
 
         for(var item in _contacts){
@@ -86,9 +86,9 @@ class _contlistState extends State<contlist> {
 
 
         });
-        print("govind api test >>>>>>>>${jsonObject}");
+        //print("govind api test >>>>>>>>${jsonObject}");
 
-        print("contactssss>>>"+"${contactsMap.keys} hello");
+       // print("contactssss>>>"+"${contactsMap.keys} hello");
 
 
         try{
@@ -113,7 +113,7 @@ class _contlistState extends State<contlist> {
          // print('Contact: $key, Phone: $value');
         }
         catch(error){
-          print(error);
+          print("other catch error   ${error}");
         }
       }
       else {
@@ -146,7 +146,7 @@ class _contlistState extends State<contlist> {
 
   @override
   Widget build(BuildContext context) {
-    print(_contacts.length.toString());
+    print("contact length  "+_contacts.length.toString());
     bool small = false;
     return SafeArea(
       child: Scaffold(
